@@ -4,7 +4,7 @@ console script. To run this script uncomment the following lines in the
 ``[options.entry_points]`` section in ``setup.cfg``::
 
     console_scripts =
-         to_csd = csd_py.to_csd:run
+         to_csd = csdigit.to_csd:run
 
 Then run ``pip install .`` (or ``pip install -e .`` for editable mode)
 which will install the command ``to_csd`` inside your current environment.
@@ -21,8 +21,8 @@ import argparse
 import logging
 import sys
 
-from csd_py import __version__
-from csd_py.csd import to_csd, to_csdfixed, to_decimal
+from csdigit import __version__
+from csdigit.csd import to_csd, to_csdfixed, to_decimal
 
 __author__ = "Wai-Shing Luk"
 __copyright__ = "Wai-Shing Luk"
@@ -51,7 +51,7 @@ def parse_args(args):
     parser.add_argument(
         "--version",
         action="version",
-        version="csd_py {ver}".format(ver=__version__),
+        version="csdigit {ver}".format(ver=__version__),
     )
     parser.add_argument(
         "-c",
@@ -171,6 +171,6 @@ if __name__ == "__main__":
     # After installing your project with pip, users can also run your Python
     # modules as scripts via the ``-m`` flag, as defined in PEP 338::
     #
-    #     python -m csd_py.to_csd 42
+    #     python -m csdigit.to_csd 42
     #
     run()
