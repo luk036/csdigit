@@ -26,10 +26,11 @@
 .. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/
-
 .. image:: https://readthedocs.org/projects/csdigit/badge/?version=latest
     :target: https://csdigit.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
+.. image:: https://codecov.io/gh/luk036/csdigit/branch/main/graph/badge.svg?token=B8UXKlkDsc 
+    :target: https://codecov.io/gh/luk036/csdigit
 
 =======
 csdigit
