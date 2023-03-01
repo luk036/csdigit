@@ -43,6 +43,12 @@ csdigit
 A longer description of your project goes here...
 
 
+Used In
+=======
+multiplierless: https://github.com/luk036/multiplierless
+
+
+
 .. _pyscaffold-notes:
 
 Note
