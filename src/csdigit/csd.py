@@ -116,7 +116,8 @@ def to_decimal(csd: str) -> float:
     """
 
     num: float = 0.0
-    loc: int = 0
+    loc: int = -1
+    pos: int = -1
     for pos, digit in enumerate(csd):
         if digit == "0":
             num *= 2.0
@@ -125,11 +126,11 @@ def to_decimal(csd: str) -> float:
         elif digit == "-":
             num = num * 2.0 - 1.0
         elif digit == ".":
-            loc = pos + 1
+            loc = pos
         else:
             raise ValueError("Work with 0, +, -, . only")
-    if loc != 0:
-        num /= pow(2.0, len(csd) - loc)
+    if loc != -1:
+        num /= pow(2.0, pos - loc)
 
     return num
 
