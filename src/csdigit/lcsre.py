@@ -5,7 +5,7 @@
 # substring in csd_str
 def longest_repeated_substring(csd_str: str) -> str:
     n = len(csd_str)
-    LCSRe = [[0 for x in range(n + 1)] for y in range(n + 1)]
+    LCSRe = [[0 for _ in range(n + 1)] for _ in range(n + 1)]
 
     res = ""  # To store result
     res_length = 0  # To store length of result

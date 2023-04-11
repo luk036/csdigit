@@ -95,6 +95,45 @@ def to_csd_i(num: int) -> str:
     return csd
 
 
+def to_decimal_using_pow(csd: str) -> float:
+    """Convert the argument to a decimal number
+
+    Original author: Harnesser
+    <https://sourceforge.net/projects/pycsd/>
+    License: GPL2
+
+    Args:
+        csd (str): string containing the CSD value
+
+    Returns:
+        float: decimal value of the CSD format
+
+    Examples:
+        >>> to_decimal_using_pow("+00-00.+")
+        28.5
+        >>> to_decimal_using_pow("0.-")
+        -0.5
+    """
+
+    num: float = 0.0
+    loc: int = 0
+    for pos, digit in enumerate(csd):
+        if digit == "0":
+            num *= 2.0
+        elif digit == "+":
+            num = num * 2.0 + 1.0
+        elif digit == "-":
+            num = num * 2.0 - 1.0
+        elif digit == ".":
+            loc = pos + 1
+        else:
+            raise ValueError("Work with 0, +, -, . only")
+    if loc != 0:
+        num /= pow(2.0, len(csd) - loc)
+
+    return num
+
+
 def to_decimal(csd: str) -> float:
     """Convert the argument to a decimal number
 
@@ -116,8 +155,8 @@ def to_decimal(csd: str) -> float:
     """
 
     num: float = 0.0
-    loc: int = -1
-    pos: int = -1
+    # Handle integral part
+    loc: int = 0
     for pos, digit in enumerate(csd):
         if digit == "0":
             num *= 2.0
@@ -126,12 +165,25 @@ def to_decimal(csd: str) -> float:
         elif digit == "-":
             num = num * 2.0 - 1.0
         elif digit == ".":
-            loc = pos
+            loc = pos + 1
+            break
         else:
             raise ValueError("Work with 0, +, -, . only")
-    if loc != -1:
-        num /= pow(2.0, pos - loc)
+    if loc == 0:
+        return num
 
+    # Handle fraction part
+    scale = 0.5
+    for digit in csd[loc:]:
+        if digit == "0":
+            pass
+        elif digit == "+":
+            num += scale
+        elif digit == "-":
+            num -= scale
+        else:
+            raise ValueError("Work with 0, +, -, . only")
+        scale /= 2.0
     return num
 
 
