@@ -17,7 +17,8 @@ def longest_repeated_substring(csd_str: str) -> str:
 
             # (j-i) > LCSRe[i-1][j-1] to remove
             # overlapping
-            if csd_str[i - 1] == csd_str[j - 1] and LCSRe[i - 1][j - 1] < (j - i):
+            if csd_str[i - 1] == csd_str[j - 1] and \
+                    LCSRe[i - 1][j - 1] < (j - i):
                 LCSRe[i][j] = LCSRe[i - 1][j - 1] + 1
 
                 # updating maximum length of the
