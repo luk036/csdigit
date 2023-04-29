@@ -24,25 +24,25 @@ def to_csd(num: float, places: int) -> str:
         >>> to_csd(-0.5, 2)
         '0.-0'
     """
-
     # figure out binary range, special case for 0
     if num == 0.0:
         return "0"
 
     absnum = fabs(num)
     if absnum < 1.0:
-        rem = 0.0
+        rem = 0
         csd = "0"
     else:
         rem = ceil(log(absnum * 1.5, 2))
         csd = ""
     p2n = pow(2, rem)
-    eps = pow(2, -places)
-    while p2n > eps:
-        if p2n == 1.0:
+    # eps = pow(2, -places)
+    while rem > -places:
+        if rem == 0:
             csd += "."
         # convert the number
-        p2n /= 2.0
+        rem -= 1
+        p2n /= 2
         det = 1.5 * num
         if det > p2n:
             csd += "+"
@@ -77,7 +77,8 @@ def to_csd_i(num: int) -> str:
     if num == 0:
         return "0"
 
-    p2n = 2 ** ceil(log(abs(num) * 1.5, 2))
+    rem = ceil(log(abs(num) * 1.5, 2))
+    p2n = pow(2, rem)
     csd = ""
     while p2n > 1:
         # convert the number
@@ -243,16 +244,17 @@ def to_csdfixed(num: float, nnz: int) -> str:
 
     absnum = fabs(num)
     if absnum < 1.0:
-        rem = 0.0
+        rem = 0
         csd = "0"
     else:
         rem = ceil(log(absnum * 1.5, 2))
         csd = ""
-    p2n = pow(2.0, rem)
-    while p2n > 1.0 or (nnz > 0 and fabs(num) > 1e-100):
-        if p2n == 1.0:
+    p2n = pow(2, rem)
+    while rem > 0 or (nnz > 0 and fabs(num) > 1e-100):
+        if rem == 0:
             csd += "."
-        p2n /= 2.0
+        p2n /= 2
+        rem -= 1
         det = 1.5 * num
         if det > p2n:
             csd += "+"
