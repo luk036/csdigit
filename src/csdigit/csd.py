@@ -33,16 +33,16 @@ def to_csd(num: float, places: int) -> str:
         rem = 0
         csd = "0"
     else:
-        rem = ceil(log(absnum * 1.5, 2))
+        rem = int(ceil(log(absnum * 1.5, 2)))
         csd = ""
-    p2n = pow(2, rem)
+    p2n = pow(2.0, rem)
     # eps = pow(2, -places)
     while rem > -places:
         if rem == 0:
             csd += "."
         # convert the number
         rem -= 1
-        p2n /= 2
+        p2n /= 2.0
         det = 1.5 * num
         if det > p2n:
             csd += "+"
@@ -272,6 +272,7 @@ def to_csdfixed(num: float, nnz: int) -> str:
 
 
 if __name__ == "__main__":
-    import doctest
+    # import doctest
+    # doctest.testmod()
 
-    doctest.testmod()
+    print(to_csd(28.5, 2))
