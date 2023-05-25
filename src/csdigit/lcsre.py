@@ -1,6 +1,7 @@
 # Python 3 program to find the longest repeated
 # non-overlapping substring
 
+
 # Returns the longest repeating non-overlapping
 # substring in csd_str
 def longest_repeated_substring(csd_str: str) -> str:
@@ -14,11 +15,9 @@ def longest_repeated_substring(csd_str: str) -> str:
     index = 0
     for i in range(1, n + 1):
         for j in range(i + 1, n + 1):
-
             # (j-i) > LCSRe[i-1][j-1] to remove
             # overlapping
-            if csd_str[i - 1] == csd_str[j - 1] and \
-                    LCSRe[i - 1][j - 1] < (j - i):
+            if csd_str[i - 1] == csd_str[j - 1] and LCSRe[i - 1][j - 1] < (j - i):
                 LCSRe[i][j] = LCSRe[i - 1][j - 1] + 1
 
                 # updating maximum length of the

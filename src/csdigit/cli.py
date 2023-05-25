@@ -47,8 +47,7 @@ def parse_args(args):
     Returns:
       :obj:`argparse.Namespace`: command line parameters namespace
     """
-    parser = argparse.ArgumentParser(
-        description="Converts a decimal to a CSD format")
+    parser = argparse.ArgumentParser(description="Converts a decimal to a CSD format")
     parser.add_argument(
         "--version",
         action="version",
