@@ -37,7 +37,7 @@ csdigit
 =======
 
 
-    Add a short description here!
+    Canonical Signed Digit Conversion in Python
 
 
 A longer description of your project goes here...
