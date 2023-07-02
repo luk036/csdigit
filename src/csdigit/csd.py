@@ -5,7 +5,22 @@ from math import ceil, fabs, log
 
 
 def to_csd(num: float, places: int) -> str:
-    """Convert the argument `num` to a string in CSD Format.
+    """Convert to CSD (Canonical Signed Digit) string representation
+
+    The function `to_csd` converts a given number to its
+    Canonical Signed Digit (CSD) representation
+    with a specified number of decimal places.
+
+    The `num` parameter is a double precision floating-point
+    number that represents the value
+    to be converted to CSD (Canonic Signed Digit) representation.
+
+    The `places` parameter in the `to_csd` function represents
+    the number of decimal places to include in the CSD
+    (Canonical Signed Digit) representation of the given `num`.
+
+    The function `to_csd` returns a string representation
+    of the given `num` in Canonical Signed Digit (CSD) format.
 
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
@@ -58,6 +73,15 @@ def to_csd(num: float, places: int) -> str:
 def to_csd_i(num: int) -> str:
     """Convert the argument `num` to a string in CSD Format.
 
+    The function converts a given integer into a Canonical Signed
+    Digit (CSD) representation.
+
+    The parameter `num` is an integer that represents the number
+    for which we want to generate the CSD (Canonical Signed Digit)
+    representation.
+
+    The function `to_csd_i` returns a string.
+
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
@@ -99,6 +123,10 @@ def to_csd_i(num: int) -> str:
 def to_decimal_using_pow(csd: str) -> float:
     """Convert the argument to a decimal number
 
+    The function `to_decimal_using_pow` takes a CSD (Canonical
+    Signed Digit) string as input and converts it to a decimal
+    number with a pow function.
+
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
@@ -137,6 +165,11 @@ def to_decimal_using_pow(csd: str) -> float:
 
 def to_decimal(csd: str) -> float:
     """Convert the argument to a decimal number
+
+    The function `to_decimal` takes a CSD (Canonical Signed Digit) string as
+    input and converts it to a decimal number. It iterates through the chars
+    of the string and performs the corresponding operations based on the
+    character.
 
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
@@ -191,6 +224,11 @@ def to_decimal(csd: str) -> float:
 def to_decimal_i(csd: str) -> int:
     """Convert the argument to a decimal number
 
+    The function `to_decimal_i` takes a CSD (Canonical Signed Digit) string as
+    input and converts it to an integer. It iterates through the characters of
+    the string and performs the corresponding operations based on the
+    character.
+
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
@@ -220,6 +258,19 @@ def to_decimal_i(csd: str) -> int:
 
 def to_csdfixed(num: float, nnz: int) -> str:
     """Convert the argument `num` to a string in CSD Format.
+
+    The function `to_csdfixed` converts a given number into a CSD (Canonic
+    Signed Digit) representation with a specified number of non-zero digits.
+
+    The parameter `num` is a double precision floating-point number that
+    represents the input value for conversion to CSD (Canonic Signed Digit)
+    fixed-point representation.
+    The parameter `nnz` stands for "number of non-zero bits". It represents the
+    maximum number of non-zero bits allowed in the output CSD (Canonical Signed
+    Digit) representation of the given `num`.
+
+    The function `to_csdfixed` returns a string representation of the given
+    `num` in Canonical Signed Digit (CSD) format.
 
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
