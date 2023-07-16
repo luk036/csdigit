@@ -1,3 +1,4 @@
+recommonmark>=0.7
 nb2plots>=0.5.2
 pillow>=4.2.1
 sphinx-gallery>=0.1.12
