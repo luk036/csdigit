@@ -37,7 +37,6 @@ def to_csd(num, places=0):
     n -= 1
 
     while n >= -places:
-
         limit = pow(2.0, n + 1) / 3.0
 
         # decimal point?
@@ -90,7 +89,6 @@ def to_decimal(csd_str):
 
     num = 0.0
     for ii in range(len(csd_str)):
-
         power_of_two = 2.0 ** (msb_power - ii)
 
         if csd_str[ii] == "+":
