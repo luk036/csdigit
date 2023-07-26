@@ -38,6 +38,10 @@ def to_csd(num: float, places: int) -> str:
         '+00-00.+0'
         >>> to_csd(-0.5, 2)
         '0.-0'
+        >>> to_csd(0.0, 2)
+        '0'
+        >>> to_csd(0.0, 0)
+        '0'
     """
     # figure out binary range, special case for 0
     if num == 0.0:
@@ -95,8 +99,11 @@ def to_csd_i(num: int) -> str:
     Examples:
         >>> to_csd_i(28)
         '+00-00'
+        >>> to_csd_i(-0)
+        '0'
+        >>> to_csd_i(0)
+        '0'
     """
-
     # figure out binary range, special case for 0
     if num == 0:
         return "0"
@@ -142,6 +149,9 @@ def to_decimal_using_pow(csd: str) -> float:
         28.5
         >>> to_decimal_using_pow("0.-")
         -0.5
+        >>> to_decimal_using_pow("0")
+        0.0
+    
     """
 
     num: float = 0.0
@@ -184,6 +194,14 @@ def to_decimal(csd: str) -> float:
     Examples:
         >>> to_decimal("+00-00.+")
         28.5
+        >>> to_decimal("0.-")
+        -0.5
+        >>> to_decimal("0")
+        0.0
+        >>> to_decimal("0.0")
+        0.0
+        >>> to_decimal("0.+")
+        0.5
         >>> to_decimal("0.-")
         -0.5
     """
@@ -288,6 +306,28 @@ def to_csdfixed(num: float, nnz: int) -> str:
         '+00-00.+'
         >>> to_csdfixed(-0.5, 4)
         '0.-'
+        >>> to_csdfixed(0.0, 4)
+        '0'
+        >>> to_csdfixed(0.5, 4)
+        '0.+'
+        >>> to_csdfixed(-0.5, 4)
+        '0.-'
+        >>> to_csdfixed(0.0, 4)
+        '0'
+        >>> to_csdfixed(0.5, 4)
+        '0.+'
+        >>> to_csdfixed(-0.5, 4)
+        '0.-'
+        >>> to_csdfixed(0.0, 4)
+        '0'
+        >>> to_csdfixed(0.5, 4)
+        '0.+'
+        >>> to_csdfixed(-0.5, 4)
+        '0.-'
+        >>> to_csdfixed(0.0, 4)
+        '0'
+        >>> to_csdfixed(0.5, 4)
+        '0.+'
     """
 
     if num == 0.0:
