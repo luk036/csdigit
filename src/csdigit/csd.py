@@ -151,7 +151,6 @@ def to_decimal_using_pow(csd: str) -> float:
         -0.5
         >>> to_decimal_using_pow("0")
         0.0
-    
     """
 
     num: float = 0.0
