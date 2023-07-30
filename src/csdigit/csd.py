@@ -151,6 +151,12 @@ def to_decimal_using_pow(csd: str) -> float:
         -0.5
         >>> to_decimal_using_pow("0")
         0.0
+        >>> to_decimal_using_pow("0.0")
+        0.0
+        >>> to_decimal_using_pow("0.+")
+        0.5
+        >>> to_decimal_using_pow("0.-")
+        -0.5
     """
 
     num: float = 0.0
@@ -259,6 +265,8 @@ def to_decimal_i(csd: str) -> int:
     Examples:
         >>> to_decimal_i("+00-00")
         28
+        >>> to_decimal_i("0")
+        0
     """
     num: int = 0
     for digit in csd:
@@ -311,22 +319,6 @@ def to_csdfixed(num: float, nnz: int) -> str:
         '0.+'
         >>> to_csdfixed(-0.5, 4)
         '0.-'
-        >>> to_csdfixed(0.0, 4)
-        '0'
-        >>> to_csdfixed(0.5, 4)
-        '0.+'
-        >>> to_csdfixed(-0.5, 4)
-        '0.-'
-        >>> to_csdfixed(0.0, 4)
-        '0'
-        >>> to_csdfixed(0.5, 4)
-        '0.+'
-        >>> to_csdfixed(-0.5, 4)
-        '0.-'
-        >>> to_csdfixed(0.0, 4)
-        '0'
-        >>> to_csdfixed(0.5, 4)
-        '0.+'
     """
 
     if num == 0.0:
