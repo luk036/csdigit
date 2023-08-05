@@ -43,7 +43,7 @@ csdigit
 A longer description of your project goes here...
 
 
-Used In
+Used By
 =======
 multiplierless: https://github.com/luk036/multiplierless
 
@@ -54,5 +54,5 @@ multiplierless: https://github.com/luk036/multiplierless
 Note
 ====
 
-This project has been set up using PyScaffold 4.3.1. For details and usage
+This project has been set up using PyScaffold 4.5. For details and usage
 information on PyScaffold see https://pyscaffold.org/.
