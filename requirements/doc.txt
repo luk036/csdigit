@@ -1,7 +1,7 @@
-recommonmark>=0.7
 nb2plots>=0.5.2
 pillow>=4.2.1
-sphinx-gallery>=0.1.12
+recommonmark>=0.7
 sphinx>=1.6.3
+sphinx-gallery>=0.1.12
 sphinx_rtd_theme>=0.2.4
 texext>=0.5

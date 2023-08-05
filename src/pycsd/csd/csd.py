@@ -30,7 +30,7 @@ def to_csd( num, places=0, debug=False ):
         n = 0
     else :
         n = ceil( log( fabs(num) * 3.0 / 2.0 , 2 ) )
-        
+
     csd_digits = []
 
     if debug: print "to %d.%d format" % ( n, places )
@@ -39,9 +39,9 @@ def to_csd( num, places=0, debug=False ):
     remainder = num
     previous_non_zero = False
     n -= 1
-    
+
     while( n >= -places):
-            
+
         limit = pow(2.0,n+1) / 3.0
 
         if debug: print "  ", remainder, limit,
@@ -54,31 +54,31 @@ def to_csd( num, places=0, debug=False ):
         if previous_non_zero:
             csd_digits.extend( ['0'] )
             prev_non_zero = False
-            
+
         elif remainder > limit :
             csd_digits.extend( ['+'] )
             remainder -= pow(2.0, n )
             prev_non_zero = True
-            
+
         elif remainder < -limit :
             csd_digits.extend( ['-'] )
             remainder += pow(2.0, n )
             prev_non_zero = True
-            
+
         else :
             csd_digits.extend( ['0'] )
             prev_non_zero = False
 
         n -= 1
-        
+
         if debug: print csd_digits
 
     # Always have something before the point
     if fabs(num) < 1.0:
         csd_digits.insert(0, '0')
-        
+
     csd_str = "".join( csd_digits )
-    
+
     return csd_str
 
 
@@ -98,14 +98,14 @@ def to_decimal( csd_str, debug=False ):
     except ValueError:
         m = csd_str
         n = ""
-        
+
     msb_power = len(m)-1
-    
+
     num = 0.0
     for ii in xrange( len(csd_str) ):
 
         power_of_two = 2.0**(msb_power-ii)
-        
+
         if csd_str[ii] == '+' :
             num += power_of_two
         elif csd_str[ii] == '-' :

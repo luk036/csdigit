@@ -30,9 +30,9 @@ def is_proper_csd(csd_num):
 def cycle_bits( i ) :
 
     global indent_
-    
+
     indent_ += 2
-    
+
     for ch in ( '0', '-', '+' ):
         csd_num[i] = ch
 
@@ -59,7 +59,7 @@ def wiki_table():
 ! Decimal
 |-
 """
-    
+
     for key in ordered_keys:
         wiki_str += """
 | <tt>%s</tt>
@@ -74,15 +74,13 @@ def show_csd():
 
     ordered_keys = csd_dict.keys()
     ordered_keys.sort()
-    
+
     for key in ordered_keys:
         print csd_dict[key], key
 
 
 if __name__ == '__main__' :
-    
+
     cycle_bits( num_digits-1 )
 
     print wiki_table()
-    
-    

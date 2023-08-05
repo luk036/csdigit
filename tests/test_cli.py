@@ -1,5 +1,3 @@
-import pytest
-
 from csdigit.cli import main
 
 __author__ = "Wai-Shing Luk"
