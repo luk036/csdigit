@@ -1,3 +1,4 @@
+import pytest
 from hypothesis import given
 from hypothesis.strategies import integers
 
@@ -11,26 +12,32 @@ from csdigit.csd import (
 )
 
 
-def test_for():
-    for i in range(6):
-        print(i)
-    else:
-        print("nothing")
-
-
 def test_csd_s():
     number = -342343593459544395894535439534985
     assert number == to_decimal_i(to_csd_i(number))
 
 
+def test_to_decimal_i():
+    assert to_decimal_i("+00-00") == 28
+    with pytest.raises(ValueError):
+        to_decimal_i("+00-00.+")
+
+
+def test_to_decimal_using_pow():
+    assert to_decimal_using_pow("+00-00.+") == 28.5
+    with pytest.raises(ValueError):
+        to_decimal_using_pow("+00-00.+XXX00+")
+
+
+def test_to_decimal():
+    assert to_decimal("+00-00.+") == 28.5
+    with pytest.raises(ValueError):
+        to_decimal("+00-00.+XXX00+")
+
+
 def test_to_csdfixed():
     assert to_csdfixed(28.5, 4) == "+00-00.+"
     assert to_csdfixed(-0.5, 4) == "0.-"
-
-
-def test_to_csd_invalid():
-    csd_string = "++00-00ZZZZ.+"
-    # TODO: check how to test
 
 
 @given(integers())
