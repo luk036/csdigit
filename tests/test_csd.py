@@ -33,11 +33,15 @@ def test_to_decimal():
     assert to_decimal("+00-00.+") == 28.5
     with pytest.raises(ValueError):
         to_decimal("+00-00.+XXX00+")
+    with pytest.raises(ValueError):
+        to_decimal("+00XXX-00.+00+")
 
 
 def test_to_csdfixed():
     assert to_csdfixed(28.5, 4) == "+00-00.+"
     assert to_csdfixed(-0.5, 4) == "0.-"
+    assert to_csdfixed(0.0, 4) == "0"
+    assert to_csdfixed(28.5, 2) == "+00-00"
 
 
 @given(integers())
