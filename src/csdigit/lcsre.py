@@ -22,7 +22,7 @@ def longest_repeated_substring(cs: str) -> str:
 
     Examples:
         >>> longest_repeated_substring("+-00+-00+-00+-0")
-        "+-00+-00+-00+-0
+        '+-00+-0'
     """
     n = len(cs)
     LCSRe = [[0 for _ in range(n + 1)] for _ in range(n + 1)]

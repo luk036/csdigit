@@ -244,6 +244,44 @@ def to_decimal(csd: str) -> float:
     return num
 
 
+# def to_decimal_i_using_match(csd: str) -> int:
+#     """Convert the argument to a decimal number
+#
+#     The function `to_decimal_i` takes a CSD (Canonical Signed Digit) string as
+#     input and converts it to an integer. It iterates through the characters of
+#     the string and performs the corresponding operations based on the
+#     character.
+#
+#     Original author: Harnesser
+#     <https://sourceforge.net/projects/pycsd/>
+#     License: GPL2
+#
+#     Args:
+#         csd (str): string containing the CSD value
+#
+#     Returns:
+#         int: decimal value of the CSD format
+#
+#     Examples:
+#         >>> to_decimal_i_using_match("+00-00")
+#         28
+#         >>> to_decimal_i_using_match("0")
+#         0
+#     """
+#     num: int = 0
+#     for digit in csd:
+#         match digit:
+#             case "0":
+#                 num *= 2
+#             case "+":
+#                 num = num * 2 + 1
+#             case "-":
+#                 num = num * 2 - 1
+#             case _:
+#                 raise ValueError("Work with 0, +, - only")
+#     return num
+#
+
 def to_decimal_i(csd: str) -> int:
     """Convert the argument to a decimal number
 
