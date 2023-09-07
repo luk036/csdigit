@@ -12,7 +12,7 @@ from csdigit.csd import (
 )
 
 
-def test_csd_s():
+def test_csd_special():
     number = -342343593459544395894535439534985
     assert number == to_decimal_i(to_csd_i(number))
 
