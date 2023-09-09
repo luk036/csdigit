@@ -3,6 +3,8 @@ Canonical Signed Digit Conversion
 """
 from math import ceil, fabs, log
 
+ERROR1 = "Work with 0, +, -, . only"
+ERROR2 = "Work with 0, +, - only"
 
 def to_csd(num: float, places: int) -> str:
     """Convert to CSD (Canonical Signed Digit) string representation
@@ -169,7 +171,7 @@ def to_decimal_using_pow(csd: str) -> float:
         elif digit == ".":
             loc = pos + 1
         else:
-            raise ValueError("Work with 0, +, -, . only")
+            raise ValueError(ERROR1)
     if loc != 0:
         num /= pow(2.0, len(csd) - loc)
 
@@ -221,7 +223,7 @@ def to_decimal(csd: str) -> float:
             loc = pos + 1
             break
         else:
-            raise ValueError("Work with 0, +, -, . only")
+            raise ValueError(ERROR1)
     if loc == 0:
         return num
 
@@ -235,7 +237,7 @@ def to_decimal(csd: str) -> float:
         elif digit == "-":
             num -= scale
         else:
-            raise ValueError("Work with 0, +, -, . only")
+            raise ValueError(ERROR1)
         scale /= 2.0
     return num
 
@@ -274,7 +276,7 @@ def to_decimal(csd: str) -> float:
 #             case "-":
 #                 num = num * 2 - 1
 #             case _:
-#                 raise ValueError("Work with 0, +, - only")
+#                 raise ValueError(ERROR2)
 #     return num
 #
 
@@ -311,7 +313,7 @@ def to_decimal_i(csd: str) -> int:
         elif digit == "-":
             num = num * 2 - 1
         else:
-            raise ValueError("Work with 0, +, - only")
+            raise ValueError(ERROR2)
     return num
 
 
@@ -386,7 +388,5 @@ def to_csdfixed(num: float, nnz: int) -> str:
 
 
 if __name__ == "__main__":
-    # import doctest
-    # doctest.testmod()
-
-    print(to_csd(28.5, 2))
+    import doctest
+    doctest.testmod()

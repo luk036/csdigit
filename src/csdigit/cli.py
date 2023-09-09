@@ -146,11 +146,14 @@ def main(args) -> None:
     setup_logging(args.loglevel)
     _logger.debug("Starting crazy calculations...")
     if args.decimal != float("Inf"):
-        print("The ans is {}".format(to_csd(args.decimal, args.places)))
+        ans = to_csd(args.decimal, args.places)
+        print(f"{ans}")
     if args.decimal2 != float("Inf"):
-        print("The ans is {}".format(to_csdfixed(args.decimal2, args.nnz)))
+        ans = to_csdfixed(args.decimal2, args.nnz)
+        print(f"{ans}")
     if args.csdstr != "":
-        print("The ans is {}".format(to_decimal(args.csdstr)))
+        ans = to_decimal(args.csdstr)
+        print(f"{ans}")
     _logger.info("Script ends here")
 
 
