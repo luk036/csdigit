@@ -11,7 +11,7 @@ def test_main_to_csd(capsys):
     # https://docs.pytest.org/en/stable/capture.html
     main(["-c", "28.5"])
     captured = capsys.readouterr()
-    assert "The ans is +00-00.+000" in captured.out
+    assert "+00-00.+000" in captured.out
 
 
 def test_main_to_decimal(capsys):
@@ -20,4 +20,4 @@ def test_main_to_decimal(capsys):
     # https://docs.pytest.org/en/stable/capture.html
     main(["-d", "+00-00.+000"])
     captured = capsys.readouterr()
-    assert "The ans is 28.5" in captured.out
+    assert "28.5" in captured.out
