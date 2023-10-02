@@ -6,6 +6,7 @@ from math import ceil, fabs, log
 ERROR1 = "Work with 0, +, -, . only"
 ERROR2 = "Work with 0, +, - only"
 
+
 def to_csd(num: float, places: int) -> str:
     """Convert to CSD (Canonical Signed Digit) string representation
 
@@ -280,6 +281,7 @@ def to_decimal(csd: str) -> float:
 #     return num
 #
 
+
 def to_decimal_i(csd: str) -> int:
     """Convert the argument to a decimal number
 
@@ -389,4 +391,5 @@ def to_csdfixed(num: float, nnz: int) -> str:
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
