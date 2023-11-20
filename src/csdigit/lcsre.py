@@ -5,20 +5,13 @@
 def longest_repeated_substring(cs: str) -> str:
     """Longest repeated non-overlapping substring
 
-    The function `longest_repeated_substring` takes a string and its length as
-    input and returns the longest repeated substring in the string.
+    The `longest_repeated_substring` function takes a string as input and returns the longest repeated
+    substring in the string.
 
-    The parameter `cs` a character array, which represents the
-    input string. It is assumed that the string is null-terminated.
-
-    The function `longest_repeated_substring` returns a string, which is the
-    longest repeated substring in the given input string `cs`.
-
-    Args:
-        cs (str): string containing the CSD value
-
-    Returns:
-        str: containing the longest repeated substring
+    :param cs: The parameter `cs` is a string containing the CSD value
+    :type cs: str
+    :return: The function `longest_repeated_substring` returns a string, which is the longest repeated
+    substring in the given input string `cs`.
 
     Examples:
         >>> longest_repeated_substring("+-00+-00+-00+-0")
