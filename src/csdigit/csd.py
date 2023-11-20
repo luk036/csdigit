@@ -42,13 +42,13 @@ def to_csd(num: float, places: int) -> str:
         >>> to_csd(-0.5, 2)
         '0.-0'
         >>> to_csd(0.0, 2)
-        '0'
+        '0.00'
         >>> to_csd(0.0, 0)
         '0'
     """
     # figure out binary range, special case for 0
-    if num == 0.0:
-        return "0"
+    # if num == 0.0:
+    #     return "0"
 
     absnum = fabs(num)
     if absnum < 1.0:
@@ -58,7 +58,6 @@ def to_csd(num: float, places: int) -> str:
         rem = int(ceil(log(absnum * 1.5, 2)))
         csd = ""
     p2n = pow(2.0, rem)
-    # eps = pow(2, -places)
     while rem > -places:
         if rem == 0:
             csd += "."
@@ -232,7 +231,7 @@ def to_decimal(csd: str) -> float:
     scale = 0.5
     for digit in csd[loc:]:
         if digit == "0":
-            pass
+            pass  # do not need to do anything
         elif digit == "+":
             num += scale
         elif digit == "-":
@@ -356,10 +355,6 @@ def to_csdfixed(num: float, nnz: int) -> str:
         >>> to_csdfixed(0.5, 4)
         '0.+'
     """
-
-    if num == 0.0:
-        return "0"
-
     absnum = fabs(num)
     if absnum < 1.0:
         rem = 0
