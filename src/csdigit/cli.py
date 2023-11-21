@@ -128,7 +128,7 @@ def setup_logging(loglevel) -> None:
         level=loglevel,
         stream=sys.stdout,
         format=logformat,
-        datefmt="%Y-%m-%d %hgr:%M:%S",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
 
