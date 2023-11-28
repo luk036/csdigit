@@ -10,7 +10,7 @@
 -->
 
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
-[![ReadTheDocs](https://readthedocs.org/projects/csdigit/badge/?version=latest)](https://csdigit.readthedocs.io/en/stable/)
+[![ReadTheDocs](https://readthedocs.org/projects/csdigit/badge/?version=latest)](https://csdigit.readthedocs.io/en/latest/)
 [![codecov](https://codecov.io/gh/luk036/csdigit/branch/main/graph/badge.svg?token=B8UXKlkDsc)](https://codecov.io/gh/luk036/csdigit)
 
 # csdigit
