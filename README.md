@@ -23,6 +23,11 @@ A longer description of your project goes here...
 
 [multiplierless](https://github.com/luk036/multiplierless)
 
+## 👀 See also
+
+* [csd-rs](https://luk036.github.io/csd-rs)
+* [csd-cpp](https://luk036.github.io/csd-cpp)
+
 <!-- pyscaffold-notes -->
 
 ## Note
