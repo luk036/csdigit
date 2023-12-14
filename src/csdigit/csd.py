@@ -18,10 +18,14 @@ def to_csd(num: float, places: int) -> str:
 
     :param num: The `num` parameter is a double precision floating-point number that represents the
     value to be converted to CSD (Canonical Signed Digit) representation
+
     :type num: float
+
     :param places: The `places` parameter in the `to_csd` function represents the number of decimal
     places to include in the CSD (Canonical Signed Digit) representation of the given `num`
+
     :type places: int
+
     :return: The function `to_csd` returns a string representation of the given `num` in Canonical
     Signed Digit (CSD) format.
 
@@ -73,8 +77,7 @@ def to_csd_i(num: int) -> str:
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
 
-    :param num: The `num` parameter is an integer that represents the decimal value to be converted to
-    CSD format
+    :param num: The `num` parameter is an integer that represents the decimal value to be converted to CSD format
     :type num: int
     :return: The function `to_csd_i` returns a string containing the CSD (Canonical Signed Digit) value.
 
@@ -163,6 +166,7 @@ def to_decimal(csd: str) -> float:
 
     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
     we want to convert to a decimal number
+
     :type csd: str
 
     Examples:
@@ -222,7 +226,9 @@ def to_decimal_i(csd: str) -> int:
 
     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
     we want to convert to a decimal number
+
     :type csd: str
+
     :return: The function `to_decimal_i` returns an integer, which is the decimal value of the CSD
     (Canonical Signed Digit) format.
 
@@ -256,11 +262,15 @@ def to_csdfixed(num: float, nnz: int) -> str:
 
     :param num: The `num` parameter is a double precision floating-point number that represents the
     input value for conversion to CSD (Canonic Signed Digit) fixed-point representation
+
     :type num: float
+
     :param nnz: The parameter `nnz` stands for "number of non-zero bits". It represents the maximum
     number of non-zero bits allowed in the output CSD (Canonical Signed Digit) representation of the
     given `num`
+
     :type nnz: int
+
     :return: The function `to_csdfixed` returns a string representation of the given `num` in Canonical
     Signed Digit (CSD) format.
 
