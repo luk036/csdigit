@@ -9,7 +9,9 @@ def longest_repeated_substring(cs: str) -> str:
     substring in the string.
 
     :param cs: The parameter `cs` is a string containing the CSD value
+
     :type cs: str
+
     :return: The function `longest_repeated_substring` returns a string, which is the longest repeated
     substring in the given input string `cs`.
 

@@ -32,7 +32,7 @@ def to_csd(decimal_value: float, places: int) -> str:
         >>> to_csd(-0.5, 2)
         '0.-0'
         >>> to_csd(0.0, 2)
-        '0'
+        '0.00'
         >>> to_csd(0.0, 0)
         '0'
     """
@@ -48,7 +48,6 @@ def to_csd(decimal_value: float, places: int) -> str:
         rem = int(ceil(log(absnum * 1.5, 2)))
         csd = ""
     p2n = pow(2.0, rem)
-    # eps = pow(2, -places)
     while rem > -places:
         if rem == 0:
             csd += "."
@@ -198,6 +197,7 @@ def to_decimal(csd: str) -> float:
 
     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
     we want to convert to a decimal number
+
     :type csd: str
 
     Examples:
@@ -231,7 +231,9 @@ def to_decimal_i(csd: str) -> int:
 
     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
     we want to convert to a decimal number
+
     :type csd: str
+
     :return: The function `to_decimal_i` returns an integer, which is the decimal value of the CSD
     (Canonical Signed Digit) format.
 
