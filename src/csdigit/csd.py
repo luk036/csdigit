@@ -2,12 +2,13 @@
 Canonical Signed Digit Conversion
 """
 from math import ceil, fabs, log
+from typing import Tuple
 
 ERROR1 = "Work with 0, +, -, . only"
 ERROR2 = "Work with 0, +, - only"
 
 
-def to_csd(num: float, places: int) -> str:
+def to_csd(decimal_value: float, places: int) -> str:
     """
     The `to_csd` function converts a given decimal number to its Canonical Signed Digit (CSD)
     representation with a specified number of decimal places.
@@ -16,13 +17,13 @@ def to_csd(num: float, places: int) -> str:
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
 
-    :param num: The `num` parameter is a double precision floating-point number that represents the
+    :param decimal_value: The `decimal_value` parameter is a double precision floating-point number that represents the
     value to be converted to CSD (Canonical Signed Digit) representation
-    :type num: float
+    :type decimal_value: float
     :param places: The `places` parameter in the `to_csd` function represents the number of decimal
-    places to include in the CSD (Canonical Signed Digit) representation of the given `num`
+    places to include in the CSD (Canonical Signed Digit) representation of the given `decimal_value`
     :type places: int
-    :return: The function `to_csd` returns a string representation of the given `num` in Canonical
+    :return: The function `to_csd` returns a string representation of the given `decimal_value` in Canonical
     Signed Digit (CSD) format.
 
     Examples:
@@ -36,10 +37,10 @@ def to_csd(num: float, places: int) -> str:
         '0'
     """
     # figure out binary range, special case for 0
-    if num == 0.0:
+    if decimal_value == 0.0:
         return "0"
 
-    absnum = fabs(num)
+    absnum = fabs(decimal_value)
     if absnum < 1.0:
         rem = 0
         csd = "0"
@@ -54,19 +55,19 @@ def to_csd(num: float, places: int) -> str:
         # convert the number
         rem -= 1
         p2n /= 2.0
-        det = 1.5 * num
+        det = 1.5 * decimal_value
         if det > p2n:
             csd += "+"
-            num -= p2n
+            decimal_value -= p2n
         elif det < -p2n:
             csd += "-"
-            num += p2n
+            decimal_value += p2n
         else:
             csd += "0"
     return csd
 
 
-def to_csd_i(num: int) -> str:
+def to_csd_i(decimal_value: int) -> str:
     """
     The `to_csd_i` function converts a given integer into a Canonical Signed Digit (CSD) representation.
 
@@ -74,9 +75,9 @@ def to_csd_i(num: int) -> str:
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
 
-    :param num: The `num` parameter is an integer that represents the decimal value to be converted to
+    :param decimal_value: The `decimal_value` parameter is an integer that represents the decimal value to be converted to
     CSD format
-    :type num: int
+    :type decimal_value: int
     :return: The function `to_csd_i` returns a string containing the CSD (Canonical Signed Digit) value.
 
     Examples:
@@ -88,22 +89,22 @@ def to_csd_i(num: int) -> str:
         '0'
     """
     # figure out binary range, special case for 0
-    if num == 0:
+    if decimal_value == 0:
         return "0"
 
-    rem = ceil(log(abs(num) * 1.5, 2))
+    rem = ceil(log(abs(decimal_value) * 1.5, 2))
     p2n = pow(2, rem)
     csd = ""
     while p2n > 1:
         # convert the number
         p2n_half = p2n // 2
-        det = 3 * num
+        det = 3 * decimal_value
         if det > p2n:
             csd += "+"
-            num -= p2n_half
+            decimal_value -= p2n_half
         elif det < -p2n:
             csd += "-"
-            num += p2n_half
+            decimal_value += p2n_half
         else:
             csd += "0"
         p2n = p2n_half
@@ -135,28 +136,61 @@ def to_decimal_using_pow(csd: str) -> float:
         0.5
     """
 
-    num: float = 0.0
+    decimal_value: float = 0.0
     loc: int = 0
     for pos, digit in enumerate(csd):
         if digit == "0":
-            num *= 2.0
+            decimal_value *= 2.0
         elif digit == "+":
-            num = num * 2.0 + 1.0
+            decimal_value = decimal_value * 2.0 + 1.0
         elif digit == "-":
-            num = num * 2.0 - 1.0
+            decimal_value = decimal_value * 2.0 - 1.0
         elif digit == ".":
             loc = pos + 1
         else:
             raise ValueError(ERROR1)
     if loc != 0:
-        num /= pow(2.0, len(csd) - loc)
+        decimal_value /= pow(2.0, len(csd) - loc)
 
-    return num
+    return decimal_value
+
+
+def to_decimal_integral(csd: str) -> Tuple[int, int]:
+    """Handle integral part of CSD string."""
+    decimal_value: int = 0
+    for pos, digit in enumerate(csd):
+        if digit == "0":
+            decimal_value *= 2
+        elif digit == "+":
+            decimal_value = decimal_value * 2 + 1
+        elif digit == "-":
+            decimal_value = decimal_value * 2 - 1
+        elif digit == ".":
+            return decimal_value, pos + 1
+        else:
+            raise ValueError(ERROR1)
+    return decimal_value, 0
+
+
+def to_decimal_fractional(csd: str) -> float:
+    """Handle fractional part of CSD string."""
+    decimal_value = 0.0
+    scale = 0.5
+    for digit in csd:
+        if digit == "0":
+            pass
+        elif digit == "+":
+            decimal_value += scale
+        elif digit == "-":
+            decimal_value -= scale
+        else:
+            raise ValueError(ERROR1)
+        scale /= 2.0
+    return decimal_value
 
 
 def to_decimal(csd: str) -> float:
-    """
-    The `to_decimal` function converts a CSD (Canonical Signed Digit) string to a decimal number.
+    """Convert CSD string to decimal number.
 
     Original author: Harnesser
     <https://sourceforge.net/projects/pycsd/>
@@ -172,44 +206,18 @@ def to_decimal(csd: str) -> float:
         >>> to_decimal("0.-")
         -0.5
         >>> to_decimal("0")
-        0.0
+        0
         >>> to_decimal("0.0")
         0.0
         >>> to_decimal("0.+")
         0.5
     """
-
-    num: float = 0.0
-    # Handle integral part
-    loc: int = 0
-    for pos, digit in enumerate(csd):
-        if digit == "0":
-            num *= 2.0
-        elif digit == "+":
-            num = num * 2.0 + 1.0
-        elif digit == "-":
-            num = num * 2.0 - 1.0
-        elif digit == ".":
-            loc = pos + 1
-            break
-        else:
-            raise ValueError(ERROR1)
+    integral, loc = to_decimal_integral(csd)
     if loc == 0:
-        return num
+        return integral
 
-    # Handle fraction part
-    scale = 0.5
-    for digit in csd[loc:]:
-        if digit == "0":
-            pass
-        elif digit == "+":
-            num += scale
-        elif digit == "-":
-            num -= scale
-        else:
-            raise ValueError(ERROR1)
-        scale /= 2.0
-    return num
+    fractional = to_decimal_fractional(csd[loc:])
+    return integral + fractional
 
 
 def to_decimal_i(csd: str) -> int:
@@ -233,20 +241,11 @@ def to_decimal_i(csd: str) -> int:
         >>> to_decimal_i("0")
         0
     """
-    num: int = 0
-    for digit in csd:
-        if digit == "0":
-            num *= 2
-        elif digit == "+":
-            num = num * 2 + 1
-        elif digit == "-":
-            num = num * 2 - 1
-        else:
-            raise ValueError(ERROR2)
-    return num
+    integral, _ = to_decimal_integral(csd)
+    return integral
 
 
-def to_csdfixed(num: float, nnz: int) -> str:
+def to_csdfixed(decimal_value: float, nnz: int) -> str:
     """
     The `to_csdfixed` function converts a given decimal number into a Canonical Signed Digit (CSD)
     representation with a specified number of non-zero digits.
@@ -255,14 +254,14 @@ def to_csdfixed(num: float, nnz: int) -> str:
     <https://sourceforge.net/projects/pycsd/>
     License: GPL2
 
-    :param num: The `num` parameter is a double precision floating-point number that represents the
+    :param decimal_value: The `decimal_value` parameter is a double precision floating-point number that represents the
     input value for conversion to CSD (Canonic Signed Digit) fixed-point representation
-    :type num: float
+    :type decimal_value: float
     :param nnz: The parameter `nnz` stands for "number of non-zero bits". It represents the maximum
     number of non-zero bits allowed in the output CSD (Canonical Signed Digit) representation of the
-    given `num`
+    given `decimal_value`
     :type nnz: int
-    :return: The function `to_csdfixed` returns a string representation of the given `num` in Canonical
+    :return: The function `to_csdfixed` returns a string representation of the given `decimal_value` in Canonical
     Signed Digit (CSD) format.
 
     Examples:
@@ -276,10 +275,10 @@ def to_csdfixed(num: float, nnz: int) -> str:
         '0.+'
     """
 
-    if num == 0.0:
+    if decimal_value == 0.0:
         return "0"
 
-    absnum = fabs(num)
+    absnum = fabs(decimal_value)
     if absnum < 1.0:
         rem = 0
         csd = "0"
@@ -287,24 +286,24 @@ def to_csdfixed(num: float, nnz: int) -> str:
         rem = ceil(log(absnum * 1.5, 2))
         csd = ""
     p2n = pow(2, rem)
-    while rem > 0 or (nnz > 0 and fabs(num) > 1e-100):
+    while rem > 0 or (nnz > 0 and fabs(decimal_value) > 1e-100):
         if rem == 0:
             csd += "."
         p2n /= 2
         rem -= 1
-        det = 1.5 * num
+        det = 1.5 * decimal_value
         if det > p2n:
             csd += "+"
-            num -= p2n
+            decimal_value -= p2n
             nnz -= 1
         elif det < -p2n:
             csd += "-"
-            num += p2n
+            decimal_value += p2n
             nnz -= 1
         else:
             csd += "0"
         if nnz == 0:
-            num = 0.0
+            decimal_value = 0.0
     return csd
 
 

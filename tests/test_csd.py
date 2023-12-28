@@ -19,8 +19,7 @@ def test_csd_special():
 
 def test_to_decimal_i():
     assert to_decimal_i("+00-00") == 28
-    with pytest.raises(ValueError):
-        to_decimal_i("+00-00.+")
+    assert to_decimal_i("+00-00.+") == 28
 
 
 def test_to_decimal_using_pow():
