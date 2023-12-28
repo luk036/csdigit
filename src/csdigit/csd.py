@@ -36,10 +36,6 @@ def to_csd(decimal_value: float, places: int) -> str:
         >>> to_csd(0.0, 0)
         '0'
     """
-    # figure out binary range, special case for 0
-    if decimal_value == 0.0:
-        return "0"
-
     absnum = fabs(decimal_value)
     if absnum < 1.0:
         rem = 0
@@ -276,10 +272,6 @@ def to_csdfixed(decimal_value: float, nnz: int) -> str:
         >>> to_csdfixed(0.5, 4)
         '0.+'
     """
-
-    if decimal_value == 0.0:
-        return "0"
-
     absnum = fabs(decimal_value)
     if absnum < 1.0:
         rem = 0
