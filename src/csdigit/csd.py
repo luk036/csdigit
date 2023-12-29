@@ -44,21 +44,25 @@ def to_csd(decimal_value: float, places: int) -> str:
         rem = int(ceil(log(absnum * 1.5, 2)))
         csd = ""
     p2n = pow(2.0, rem)
-    while rem > -places:
-        if rem == 0:
-            csd += "."
-        # convert the number
-        rem -= 1
-        p2n /= 2.0
-        det = 1.5 * decimal_value
-        if det > p2n:
-            csd += "+"
-            decimal_value -= p2n
-        elif det < -p2n:
-            csd += "-"
-            decimal_value += p2n
-        else:
-            csd += "0"
+
+    def loop_fn(value):
+        nonlocal rem, decimal_value, p2n, csd
+        while rem > value:
+            rem -= 1
+            p2n /= 2.0
+            det = 1.5 * decimal_value
+            if det > p2n:
+                csd += "+"
+                decimal_value -= p2n
+            elif det < -p2n:
+                csd += "-"
+                decimal_value += p2n
+            else:
+                csd += "0"
+
+    loop_fn(0)
+    csd += "."
+    loop_fn(-places)
     return csd
 
 
