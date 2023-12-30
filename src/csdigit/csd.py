@@ -34,7 +34,7 @@ def to_csd(decimal_value: float, places: int) -> str:
         >>> to_csd(0.0, 2)
         '0.00'
         >>> to_csd(0.0, 0)
-        '0'
+        '0.'
     """
     absnum = fabs(decimal_value)
     if absnum < 1.0:
