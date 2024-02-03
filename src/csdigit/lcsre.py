@@ -19,16 +19,16 @@ def longest_repeated_substring(cs: str) -> str:
         >>> longest_repeated_substring("+-00+-00+-00+-0")
         '+-00+-0'
     """
-    n = len(cs)
-    LCSRe = [[0 for _ in range(n + 1)] for _ in range(n + 1)]
+    ndim = len(cs) + 1
+    LCSRe = [[0 for _ in range(ndim)] for _ in range(ndim)]
 
     res = ""  # To store result
     res_length = 0  # To store length of result
 
     # building table in bottom-up manner
     index = 0
-    for i in range(1, n + 1):
-        for j in range(i + 1, n + 1):
+    for i in range(1, ndim):
+        for j in range(i + 1, ndim):
             # (j-i) > LCSRe[i-1][j-1] to remove
             # overlapping
             if cs[i - 1] == cs[j - 1] and LCSRe[i - 1][j - 1] < (j - i):
@@ -48,8 +48,9 @@ def longest_repeated_substring(cs: str) -> str:
     # all characters from first character to
     # last character of string
     if res_length > 0:
-        for i in range(index - res_length + 1, index + 1):
-            res = res + cs[i - 1]
+        # for i in range(index - res_length + 1, index + 1):
+        #     res = res + cs[i - 1]
+        res = cs[index - res_length : index]
 
     return res
 

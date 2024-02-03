@@ -1,6 +1,7 @@
 """
 Canonical Signed Digit Conversion
 """
+
 from math import ceil, fabs, log
 from typing import Tuple
 
