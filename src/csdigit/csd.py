@@ -19,13 +19,13 @@ def to_csd(decimal_value: float, places: int) -> str:
     License: GPL2
 
     :param decimal_value: The `decimal_value` parameter is a double precision floating-point number that represents the
-    value to be converted to CSD (Canonical Signed Digit) representation
+        value to be converted to CSD (Canonical Signed Digit) representation
     :type decimal_value: float
     :param places: The `places` parameter in the `to_csd` function represents the number of decimal
-    places to include in the CSD (Canonical Signed Digit) representation of the given `decimal_value`
+        places to include in the CSD (Canonical Signed Digit) representation of the given `decimal_value`
     :type places: int
     :return: The function `to_csd` returns a string representation of the given `decimal_value` in Canonical
-    Signed Digit (CSD) format.
+        Signed Digit (CSD) format.
 
     Examples:
         >>> to_csd(28.5, 2)
@@ -76,7 +76,7 @@ def to_csd_i(decimal_value: int) -> str:
     License: GPL2
 
     :param decimal_value: The `decimal_value` parameter is an integer that represents the decimal value to be converted to
-    CSD format
+        CSD format
     :type decimal_value: int
     :return: The function `to_csd_i` returns a string containing the CSD (Canonical Signed Digit) value.
 
@@ -197,7 +197,7 @@ def to_decimal(csd: str) -> float:
     License: GPL2
 
     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
-    we want to convert to a decimal number
+        we want to convert to a decimal number
 
     :type csd: str
 
@@ -231,12 +231,12 @@ def to_decimal_i(csd: str) -> int:
     License: GPL2
 
     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
-    we want to convert to a decimal number
+        we want to convert to a decimal number
 
     :type csd: str
 
     :return: The function `to_decimal_i` returns an integer, which is the decimal value of the CSD
-    (Canonical Signed Digit) format.
+        (Canonical Signed Digit) format.
 
     Examples:
         >>> to_decimal_i("+00-00")
@@ -258,14 +258,14 @@ def to_csdfixed(decimal_value: float, nnz: int) -> str:
     License: GPL2
 
     :param decimal_value: The `decimal_value` parameter is a double precision floating-point number that represents the
-    input value for conversion to CSD (Canonic Signed Digit) fixed-point representation
+        input value for conversion to CSD (Canonic Signed Digit) fixed-point representation
     :type decimal_value: float
     :param nnz: The parameter `nnz` stands for "number of non-zero bits". It represents the maximum
-    number of non-zero bits allowed in the output CSD (Canonical Signed Digit) representation of the
-    given `decimal_value`
+        number of non-zero bits allowed in the output CSD (Canonical Signed Digit) representation of the
+        given `decimal_value`
     :type nnz: int
     :return: The function `to_csdfixed` returns a string representation of the given `decimal_value` in Canonical
-    Signed Digit (CSD) format.
+        Signed Digit (CSD) format.
 
     Examples:
         >>> to_csdfixed(28.5, 4)

@@ -13,7 +13,7 @@ def longest_repeated_substring(cs: str) -> str:
     :type cs: str
 
     :return: The function `longest_repeated_substring` returns a string, which is the longest repeated
-    substring in the given input string `cs`.
+        substring in the given input string `cs`.
 
     Examples:
         >>> longest_repeated_substring("+-00+-00+-00+-0")
