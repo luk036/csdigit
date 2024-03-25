@@ -7,19 +7,19 @@ from csdigit.csd import (
     to_csd_i,
     to_csdfixed,
     to_decimal,
-    to_decimal_i,
+    # to_decimal_i,
     to_decimal_using_pow,
 )
 
 
 def test_csd_special():
     number = -342343593459544395894535439534985
-    assert number == to_decimal_i(to_csd_i(number))
+    assert number == to_decimal(to_csd_i(number))
 
 
-def test_to_decimal_i():
-    assert to_decimal_i("+00-00") == 28
-    assert to_decimal_i("+00-00.+") == 28
+# def test_to_decimal_i():
+#     assert to_decimal_i("+00-00") == 28
+#     assert to_decimal_i("+00-00.+") == 28
 
 
 def test_to_decimal_using_pow():
@@ -52,7 +52,7 @@ def test_to_csdfixed():
 
 @given(integers())
 def test_csd_i(number):
-    assert number == to_decimal_i(to_csd_i(number))
+    assert number == to_decimal(to_csd_i(number))
 
 
 @given(integers())
