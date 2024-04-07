@@ -248,6 +248,7 @@ def to_decimal(csd: str) -> float:
 #     return integral
 #
 
+
 def to_csdfixed(decimal_value: float, nnz: int) -> str:
     """
     The `to_csdfixed` function converts a given decimal number into a Canonical Signed Digit (CSD)
