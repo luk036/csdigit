@@ -25,8 +25,8 @@ Canonical Signed Digit (CSD) is a type of signed-digit representation of numbers
 
 ## 👀 See also
 
-* [csd-rs](https://luk036.github.io/csd-rs)
-* [csd-cpp](https://luk036.github.io/csd-cpp)
+- [csd-rs](https://luk036.github.io/csd-rs)
+- [csd-cpp](https://luk036.github.io/csd-cpp)
 
 <!-- pyscaffold-notes -->
 

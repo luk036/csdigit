@@ -15,6 +15,7 @@
 ```
 
 ```{todo} Provide the correct links/replacements at the bottom of the document.
+
 ```
 
 ```{todo} You might want to have a look on [PyScaffold's contributor's guide],
@@ -142,7 +143,7 @@ conda activate csdigit
 
 1. Create an user account on GitHub if you do not already have one.
 
-2. Fork the project [repository]: click on the *Fork* button near the top of the
+2. Fork the project [repository]: click on the _Fork_ button near the top of the
    page. This creates a copy of the code under your account on GitHub.
 
 3. Clone this copy to your local disk:
@@ -161,6 +162,7 @@ conda activate csdigit
    to be able to import the package under development in the Python REPL.
 
    ```{todo} if you are not using pre-commit, please remove the following item:
+
    ```
 
 5. Install [pre-commit]:
@@ -198,6 +200,7 @@ conda activate csdigit
    to record your changes in [git].
 
    ```{todo} if you are not using pre-commit, please remove the following item:
+
    ```
 
    Please make sure to see the validation messages from [pre-commit] and fix
@@ -330,11 +333,11 @@ on [PyPI], the following steps can be used to release a new version for
 6. Run `tox -e publish -- --repository pypi` and check that everything was
    uploaded to [PyPI] correctly.
 
-[^contrib1]: Even though, these resources focus on open source projects and
+[^contrib1]:
+    Even though, these resources focus on open source projects and
     communities, the general ideas behind collaborating with other developers
     to collectively create software are general and can be applied to all sorts
     of environments, including private companies and proprietary code bases.
-
 
 [black]: https://pypi.org/project/black/
 [commonmark]: https://commonmark.org/
@@ -363,8 +366,8 @@ on [PyPI], the following steps can be used to release a new version for
 [virtual environment]: https://realpython.com/python-virtual-environments-a-primer/
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
 
-
 ```{todo} Please review and change the following definitions:
+
 ```
 
 [repository]: https://github.com/<USERNAME>/csdigit

@@ -2,7 +2,6 @@
 
 Canomical Signed Digit Conversion
 
-
 ## Note
 
 > This is the main page of your project's [Sphinx] documentation. It is
@@ -12,7 +11,6 @@ Canomical Signed Digit Conversion
 >
 > Please check [Sphinx] and [MyST] for more information
 > about how to document your project and how to configure your preferences.
-
 
 ## Contents
 
@@ -29,9 +27,9 @@ Module Reference <api/modules>
 
 ## Indices and tables
 
-* {ref}`genindex`
-* {ref}`modindex`
-* {ref}`search`
+- {ref}`genindex`
+- {ref}`modindex`
+- {ref}`search`
 
 [Sphinx]: http://www.sphinx-doc.org/
 [Markdown]: https://daringfireball.net/projects/markdown/
