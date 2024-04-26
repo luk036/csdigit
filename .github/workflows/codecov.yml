@@ -35,5 +35,5 @@ jobs:
       #     files: ./coverage1.xml,./coverage2.xml,!./cache
       #     flags: unittests
       #     name: codecov-umbrella
-      #     token: 9b5fb76e-8f8a-4e20-b561-8afcabb9200a
+      #     token: ${{ secrets.CODECOV_TOKEN }}
       #     verbose: true
