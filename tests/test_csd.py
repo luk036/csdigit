@@ -16,11 +16,6 @@ def test_csd_special():
     assert number == to_decimal(to_csd_i(number))
 
 
-# def test_to_decimal_i():
-#     assert to_decimal_i("+00-00") == 28
-#     assert to_decimal_i("+00-00.+") == 28
-
-
 def test_to_decimal_using_pow():
     assert to_decimal_using_pow("+00-00.+") == 28.5
     with pytest.raises(ValueError):

@@ -5,8 +5,8 @@ Canonical Signed Digit Conversion
 from math import ceil, fabs, log
 from typing import Tuple
 
-ERROR1 = "Work with 0, +, -, . only"
-ERROR2 = "Work with 0, +, - only"
+ERROR1 = "Work with 0, +, -, and . only"
+ERROR2 = "Work with 0, +, and - only"
 
 
 def to_csd(decimal_value: float, places: int) -> str:
@@ -219,34 +219,6 @@ def to_decimal(csd: str) -> float:
 
     fractional = to_decimal_fractional(csd[loc:])
     return integral + fractional
-
-
-# def to_decimal_i(csd: str) -> int:
-#     """
-#     The `to_decimal_i` function converts a CSD (Canonical Signed Digit) string to its corresponding
-#     decimal value.
-#
-#     Original author: Harnesser
-#     <https://sourceforge.net/projects/pycsd/>
-#     License: GPL2
-#
-#     :param csd: The `csd` parameter is a string containing the CSD (Canonical Signed Digit) value that
-#         we want to convert to a decimal number
-#
-#     :type csd: str
-#
-#     :return: The function `to_decimal_i` returns an integer, which is the decimal value of the CSD
-#         (Canonical Signed Digit) format.
-#
-#     Examples:
-#         >>> to_decimal_i("+00-00")
-#         28
-#         >>> to_decimal_i("0")
-#         0
-#     """
-#     integral, _ = to_decimal_integral(csd)
-#     return integral
-#
 
 
 def to_csdfixed(decimal_value: float, nnz: int) -> str:

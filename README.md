@@ -30,7 +30,7 @@ Canonical Signed Digit (CSD) is a type of signed-digit representation of numbers
 
 <!-- pyscaffold-notes -->
 
-## Note
+## 👉 Note
 
 This project has been set up using PyScaffold 4.5. For details and usage
 information on PyScaffold see https://pyscaffold.org/.
