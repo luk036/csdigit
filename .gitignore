@@ -70,7 +70,6 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/api/
 
 # PyBuilder
 .pybuilder/
@@ -159,3 +158,21 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Build and docs folder/files
+build/*
+dist/*
+sdist/*
+docs/api/*
+docs/_rst/*
+docs/_build/*
+cover/*
+MANIFEST
+
+# Per-project virtualenvs
+.venv*/
+.conda*/
+.python-version
+
+# my stuffs
+.hypothesis
