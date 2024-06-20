@@ -97,7 +97,7 @@ def to_csd_i(decimal_value: int) -> str:
     csd = ""
     while p2n > 1:
         # convert the number
-        p2n_half = p2n // 2
+        p2n_half = p2n >> 1
         det = 3 * decimal_value
         if det > p2n:
             csd += "+"
@@ -160,11 +160,11 @@ def to_decimal_integral(csd: str) -> Tuple[int, int]:
     decimal_value: int = 0
     for pos, digit in enumerate(csd):
         if digit == "0":
-            decimal_value *= 2
+            decimal_value <<= 1
         elif digit == "+":
-            decimal_value = decimal_value * 2 + 1
+            decimal_value = (decimal_value << 1) + 1
         elif digit == "-":
-            decimal_value = decimal_value * 2 - 1
+            decimal_value = (decimal_value << 1) - 1
         elif digit == ".":
             return decimal_value, pos + 1
         else:
