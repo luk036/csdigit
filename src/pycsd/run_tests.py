@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 """
-   Run all the tests
+Run all the tests
 """
 
 import sys
