@@ -13,8 +13,8 @@ def test_longest_repeated_substring():
     assert longest_repeated_substring(cs) == expected
 
     # Test case 2:
-    cs = "abcabcabc"
-    expected = "abc"
+    cs = "banana"
+    expected = "an"
     assert longest_repeated_substring(cs) == expected
 
     # Test case 3:

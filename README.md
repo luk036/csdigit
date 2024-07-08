@@ -13,7 +13,7 @@
 [![ReadTheDocs](https://readthedocs.org/projects/csdigit/badge/?version=latest)](https://csdigit.readthedocs.io/en/latest/)
 [![codecov](https://codecov.io/gh/luk036/csdigit/branch/main/graph/badge.svg?token=B8UXKlkDsc)](https://codecov.io/gh/luk036/csdigit)
 
-# csdigit
+# 🔄 csdigit
 
 > Canonical Signed Digit Conversion in Python
 
