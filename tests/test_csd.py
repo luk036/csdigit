@@ -5,7 +5,7 @@ from hypothesis.strategies import integers
 from csdigit.csd import (  # to_decimal_i,
     to_csd,
     to_csd_i,
-    to_csdfixed,
+    to_csdnnz,
     to_decimal,
     to_decimal_using_pow,
 )
@@ -38,10 +38,10 @@ def test_to_csd():
 
 
 def test_to_csdfixed():
-    assert to_csdfixed(28.5, 4) == "+00-00.+"
-    assert to_csdfixed(-0.5, 4) == "0.-"
-    assert to_csdfixed(0.0, 4) == "0"
-    assert to_csdfixed(28.5, 2) == "+00-00"
+    assert to_csdnnz(28.5, 4) == "+00-00.+"
+    assert to_csdnnz(-0.5, 4) == "0.-"
+    assert to_csdnnz(0.0, 4) == "0"
+    assert to_csdnnz(28.5, 2) == "+00-00"
 
 
 @given(integers())

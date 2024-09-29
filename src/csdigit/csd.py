@@ -13,7 +13,7 @@ The code contains several functions, each with a specific role:
 
 3. to_decimal_using_pow and to_decimal: These functions do the opposite of to_csd. They take a CSD string and convert it back to a decimal number.
 
-4. to_csdfixed: This function is a variation of to_csd that allows you to specify the maximum number of non-zero digits in the result.
+4. to_csdnnz: This function is a variation of to_csd that allows you to specify the maximum number of non-zero digits in the result.
 
 The code achieves its purpose through a series of mathematical operations and logical checks. For the decimal to CSD conversion, it uses powers of 2 to determine which symbols (+, -, or 0) to use at each position in the CSD string. It repeatedly divides the input number by 2 and checks if it's greater than, less than, or close to certain thresholds to decide which symbol to use.
 
@@ -245,9 +245,9 @@ def to_decimal(csd: str) -> float:
     return integral + fractional
 
 
-def to_csdfixed(decimal_value: float, nnz: int) -> str:
+def to_csdnnz(decimal_value: float, nnz: int) -> str:
     """
-    The `to_csdfixed` function converts a given decimal number into a Canonical Signed Digit (CSD)
+    The `to_csdnnz` function converts a given decimal number into a Canonical Signed Digit (CSD)
     representation with a specified number of non-zero digits.
 
     Original author: Harnesser
@@ -261,17 +261,17 @@ def to_csdfixed(decimal_value: float, nnz: int) -> str:
         number of non-zero bits allowed in the output CSD (Canonical Signed Digit) representation of the
         given `decimal_value`
     :type nnz: int
-    :return: The function `to_csdfixed` returns a string representation of the given `decimal_value` in Canonical
+    :return: The function `to_csdnnz` returns a string representation of the given `decimal_value` in Canonical
         Signed Digit (CSD) format.
 
     Examples:
-        >>> to_csdfixed(28.5, 4)
+        >>> to_csdnnz(28.5, 4)
         '+00-00.+'
-        >>> to_csdfixed(-0.5, 4)
+        >>> to_csdnnz(-0.5, 4)
         '0.-'
-        >>> to_csdfixed(0.0, 4)
+        >>> to_csdnnz(0.0, 4)
         '0'
-        >>> to_csdfixed(0.5, 4)
+        >>> to_csdnnz(0.5, 4)
         '0.+'
     """
     absnum = fabs(decimal_value)

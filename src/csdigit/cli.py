@@ -22,7 +22,7 @@ import logging
 import sys
 
 from csdigit import __version__
-from csdigit.csd import to_csd, to_csdfixed, to_decimal
+from csdigit.csd import to_csd, to_csdnnz, to_decimal
 
 __author__ = "Wai-Shing Luk"
 __copyright__ = "Wai-Shing Luk"
@@ -64,7 +64,7 @@ def parse_args(args):
     )
     parser.add_argument(
         "-f",
-        "--to_csdfixed",
+        "--to_csdnnz",
         dest="decimal2",
         help="a decimal number",
         type=float,
@@ -149,7 +149,7 @@ def main(args) -> None:
         ans = to_csd(args.decimal, args.places)
         print(f"{ans}")
     if args.decimal2 != float("Inf"):
-        ans = to_csdfixed(args.decimal2, args.nnz)
+        ans = to_csdnnz(args.decimal2, args.nnz)
         print(f"{ans}")
     if args.csdstr != "":
         ans = to_decimal(args.csdstr)
