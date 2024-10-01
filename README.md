@@ -17,31 +17,29 @@
 
 > Canonical Signed Digit Conversion in Python
 
-Canonical Signed Digit (CSD) is a type of signed-digit representation of numbers. In CSD, each digit can only be -1, 0, or 1, and no two consecutive digits can be non-zero. This representation has the advantage of being unique and having a minimal number of non-zero digits. CSD is often used in digital signal processing applications, such as filter design, because it allows for efficient implementation of arithmetic operations using simple adders and subtractors. The number of adders/subtracters required to realize a CSD coefficient is one less than the number of nonzero digits in the code.
+A Canonical Signed Digit (CSD) is a specific form of signed-digit representation of numbers. In the context of CSD, each digit is constrained to a value of -1, 0, or 1, and no two consecutive digits are permitted to be non-zero. This representation has the advantage of being unique and having a minimal number of non-zero digits. CSD is frequently employed in digital signal processing applications, such as filter design, due to its capacity for the efficient implementation of arithmetic operations through the use of straightforward adders and subtractors. The number of adders and subtracters necessary to implement a CSD coefficient is equal to the number of non-zero digits in the library, minus one.
 
-This code is all about converting numbers between decimal format and a special representation called Canonical Signed Digit (CSD). CSD is a way of writing numbers using only three symbols: 0, +, and -. It's particularly useful in certain areas of computer science and digital signal processing.
+The objective of this library is to facilitate the conversion of numbers between decimal format and a special representation known as Canonical Signed Digit (CSD). CSD is a method of representing numbers using a mere three symbols: The symbols "0," "+," and "-" are used. It is particularly advantageous in specific domains within computer science and digital signal processing.
 
-The main purpose of this code is to provide functions that can convert decimal numbers to CSD format and vice versa. It takes in regular decimal numbers (like 28.5 or -0.5) and converts them to CSD strings (like "+00-00.+" or "0.-"), and it can also do the reverse, taking CSD strings and converting them back to decimal numbers.
+The primary objective of this library is to provide the necessary functions for the conversion of decimal numbers to CSD format and vice versa. The library accepts decimal numbers in their standard form (e.g., 28.5 or -0.5) and converts them to CSD strings (e.g., "+00-00.+" or "0.-"). It is also capable of performing the inverse operation, transforming CSD strings into decimal numbers.
 
-The code contains several functions, each with a specific role:
+The library contains a number of functions, each with a specific role.
 
-1. to_csd: This function takes a decimal number and the number of decimal places desired, and outputs a CSD string. For example, it can convert 28.5 to "+00-00.+0" (with 2 decimal places).
+1. to_csd: This function takes a decimal number and the number of decimal places desired, and outputs a CSD string. To illustrate, the function can be used to convert the decimal number 28.5 to the CSD string "+00-00.+0," with two decimal places.
 
-2. to_csd_i: Similar to to_csd, but it works specifically with integers. It converts whole numbers to CSD format without a decimal point.
+2. to_csd_i: This function is analogous to to_csd, but it is designed for use with integers. The function converts whole numbers to CSD format, omitting the decimal point.
 
-3. to_decimal_using_pow and to_decimal: These functions do the opposite of to_csd. They take a CSD string and convert it back to a decimal number.
+3. The functions to_decimal_using_pow and to_decimal perform the inverse of the to_csd function. They accept a CSD string as input and return a decimal number.
 
-4. to_csdnnz: This function is a variation of to_csd that allows you to specify the maximum number of non-zero digits in the result.
+4. The to_csdnnz function is a variant of the to_csd function that allows the user to specify the maximum number of non-zero digits in the result. 
 
-The code achieves its purpose through a series of mathematical operations and logical checks. For the decimal to CSD conversion, it uses powers of 2 to determine which symbols (+, -, or 0) to use at each position in the CSD string. It repeatedly divides the input number by 2 and checks if it's greater than, less than, or close to certain thresholds to decide which symbol to use.
+The library fulfills its intended function through a sequence of mathematical operations and logical tests. In order to effect a conversion from decimal to CSD, the system employs the use of powers of 2 in order to ascertain which of the three symbols (+, -, or 0) is to be used at each position within the CSD string. The algorithm then performs repeated divisions of the input number by two and compares the result to specific thresholds to determine the appropriate symbol to use.
 
-For the CSD to decimal conversion, it goes through each symbol in the CSD string, multiplying the running total by 2 and adding 1, subtracting 1, or doing nothing based on whether the symbol is +, -, or 0.
+In order to perform the conversion from CSD to decimal, the algorithm proceeds by multiplying the running total by 2 and then adding, subtracting, or performing no further action based on the value of the symbol in the CSD string. This is done for each symbol in the string, where the symbol values are +, -, or 0. A distinct logic is employed for the integral and fractional parts, respectively.
 
-An important aspect of the code is how it handles the decimal point in CSD representations. It uses a separate logic for the part before the decimal point (the integral part) and the part after (the fractional part).
+Furthermore, the library incorporates error-checking mechanisms to guarantee the exclusive utilisation of valid CSD symbols. It also furnishes comprehensive documentation and illustrative examples for each function, thus facilitating user comprehension of the operational procedures.
 
-The code also includes error checking to ensure that only valid CSD symbols are used, and it provides detailed documentation and examples for each function to help users understand how to use them.
-
-Overall, this code provides a comprehensive set of tools for working with CSD representations, allowing users to easily convert between decimal and CSD formats in various ways.
+In conclusion, this library offers a comprehensive set of tools for working with CSD representations, facilitating the conversion between decimal and CSD formats in a variety of ways.
 
 ## Used By
 
