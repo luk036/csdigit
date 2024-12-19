@@ -21,6 +21,7 @@ The code also includes a simple example usage, where it applies the function to 
 
 In summary, this code provides a way to find the longest sequence of characters that repeats in a given text, which can be useful in various text processing and analysis tasks. It uses a clever approach to solve what could otherwise be a computationally expensive problem, making it efficient for longer input strings.
 """
+
 # Python 3 program to find the longest repeated
 # non-overlapping substring
 
