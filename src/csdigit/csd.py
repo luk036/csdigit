@@ -15,6 +15,8 @@ The code contains several functions, each with a specific role:
 
 4. to_csdnnz: This function is a variation of to_csd that allows you to specify the maximum number of non-zero digits in the result.
 
+4. to_csdnnz_i: This function is a variation of to_csd_i that allows you to specify the maximum number of non-zero digits in the result.
+
 The code achieves its purpose through a series of mathematical operations and logical checks. For the decimal to CSD conversion, it uses powers of 2 to determine which symbols (+, -, or 0) to use at each position in the CSD string. It repeatedly divides the input number by 2 and checks if it's greater than, less than, or close to certain thresholds to decide which symbol to use.
 
 For the CSD to decimal conversion, it goes through each symbol in the CSD string, multiplying the running total by 2 and adding 1, subtracting 1, or doing nothing based on whether the symbol is +, -, or 0.
@@ -298,6 +300,64 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
             nnz -= 1
         else:
             csd += "0"
+        if nnz == 0:
+            decimal_value = 0.0
+    return csd
+
+
+def to_csdnnz_i(decimal_value: int, nnz: int) -> str:
+    """
+    The `to_csdnnz_i` function converts a given integer into a Canonical Signed Digit (CSD)
+    representation with a specified number of non-zero digits.
+
+    Original author: Harnesser
+    <https://sourceforge.net/projects/pycsd/>
+    License: GPL2
+
+    :param decimal_value: The `decimal_value` parameter is an integer that represents the decimal value to be converted to
+        CSD format
+    :type decimal_value: int
+    :param nnz: The parameter `nnz` stands for "number of non-zero bits". It represents the maximum
+        number of non-zero bits allowed in the output CSD (Canonical Signed Digit) representation of the
+        given `decimal_value`
+    :type nnz: int
+    :return: The function `to_csdnnz_i` returns a string representation of the given `decimal_value` in Canonical
+        Signed Digit (CSD) format.
+
+    Examples:
+        >>> to_csdnnz_i(28, 4)
+        '+00-00'
+        >>> to_csdnnz_i(-0, 4)
+        '0'
+        >>> to_csdnnz_i(0, 4)
+        '0'
+        >>> to_csdnnz_i(37, 2)
+        '+00+00'
+        >>> to_csdnnz_i(158, 2)
+        '+0+00000'
+    """
+    # figure out binary range, special case for 0
+    if decimal_value == 0:
+        return "0"
+
+    rem = ceil(log(abs(decimal_value) * 1.5, 2))
+    p2n = pow(2, rem)
+    csd = ""
+    while p2n > 1:
+        # convert the number
+        p2n_half = p2n >> 1
+        det = 3 * decimal_value
+        if det > p2n:
+            csd += "+"
+            decimal_value -= p2n_half
+            nnz -= 1
+        elif det < -p2n:
+            csd += "-"
+            decimal_value += p2n_half
+            nnz -= 1
+        else:
+            csd += "0"
+        p2n = p2n_half
         if nnz == 0:
             decimal_value = 0.0
     return csd

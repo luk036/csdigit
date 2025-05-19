@@ -33,6 +33,8 @@ The library contains a number of functions, each with a specific role.
 
 4. The to_csdnnz function is a variant of the to_csd function that allows the user to specify the maximum number of non-zero digits in the result. 
 
+5. The to_csdnnz_i function is a variant of the to_csd_i function that allows the user to specify the maximum number of non-zero digits in the result. 
+
 The library fulfills its intended function through a sequence of mathematical operations and logical tests. In order to effect a conversion from decimal to CSD, the system employs the use of powers of 2 in order to ascertain which of the three symbols (+, -, or 0) is to be used at each position within the CSD string. The algorithm then performs repeated divisions of the input number by two and compares the result to specific thresholds to determine the appropriate symbol to use.
 
 In order to perform the conversion from CSD to decimal, the algorithm proceeds by multiplying the running total by 2 and then adding, subtracting, or performing no further action based on the value of the symbol in the CSD string. This is done for each symbol in the string, where the symbol values are +, -, or 0. A distinct logic is employed for the integral and fractional parts, respectively.

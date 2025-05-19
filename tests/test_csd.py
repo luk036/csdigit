@@ -6,6 +6,7 @@ from csdigit.csd import (  # to_decimal_i,
     to_csd,
     to_csd_i,
     to_csdnnz,
+    to_csdnnz_i,
     to_decimal,
     to_decimal_using_pow,
 )
@@ -37,11 +38,18 @@ def test_to_csd():
     assert to_csd(28.5, 0) == "+00-00."
 
 
-def test_to_csdfixed():
+def test_to_csdnn():
     assert to_csdnnz(28.5, 4) == "+00-00.+"
     assert to_csdnnz(-0.5, 4) == "0.-"
     assert to_csdnnz(0.0, 4) == "0"
     assert to_csdnnz(28.5, 2) == "+00-00"
+
+
+def test_to_csdnn_i():
+    assert to_csdnnz_i(28, 4) == "+00-00"
+    assert to_csdnnz_i(-0, 4) == "0"
+    assert to_csdnnz_i(0, 4) == "0"
+    assert to_csdnnz_i(158, 2) == "+0+00000"
 
 
 @given(integers())
