@@ -63,32 +63,37 @@ def to_csd(decimal_value: float, places: int) -> str:
         >>> to_csd(0.0, 0)
         '0.'
     """
+    # Calculate absolute value to determine initial conditions
     absnum = fabs(decimal_value)
     if absnum < 1.0:
+        # For numbers less than 1, start with '0' and no remainder
         rem = 0
         csd = "0"
     else:
+        # For larger numbers, calculate the highest power of 2 needed
         rem = int(ceil(log(absnum * 1.5, 2)))
         csd = ""
-    p2n = pow(2.0, rem)
+    p2n = pow(2.0, rem)  # Initialize power of 2
 
     def loop_fn(value):
         nonlocal rem, decimal_value, p2n, csd
         while rem > value:
             rem -= 1
-            p2n /= 2.0
-            det = 1.5 * decimal_value
+            p2n /= 2.0  # Decrease power of 2 each iteration
+            det = 1.5 * decimal_value  # Decision threshold
             if det > p2n:
                 csd += "+"
-                decimal_value -= p2n
+                decimal_value -= p2n  # Subtract current power of 2
             elif det < -p2n:
                 csd += "-"
-                decimal_value += p2n
+                decimal_value += p2n  # Add current power of 2
             else:
-                csd += "0"
+                csd += "0"  # No change needed
 
+    # Process integer part (before decimal point)
     loop_fn(0)
-    csd += "."
+    csd += "."  # Add decimal point
+    # Process fractional part (after decimal point)
     loop_fn(-places)
     return csd
 
@@ -118,22 +123,23 @@ def to_csd_i(decimal_value: int) -> str:
     if decimal_value == 0:
         return "0"
 
+    # Calculate highest power of 2 needed
     rem = ceil(log(abs(decimal_value) * 1.5, 2))
     p2n = pow(2, rem)
     csd = ""
     while p2n > 1:
         # convert the number
-        p2n_half = p2n >> 1
-        det = 3 * decimal_value
+        p2n_half = p2n >> 1  # Equivalent to dividing by 2
+        det = 3 * decimal_value  # Decision threshold (3x for integer version)
         if det > p2n:
             csd += "+"
-            decimal_value -= p2n_half
+            decimal_value -= p2n_half  # Subtract half the current power of 2
         elif det < -p2n:
             csd += "-"
-            decimal_value += p2n_half
+            decimal_value += p2n_half  # Add half the current power of 2
         else:
-            csd += "0"
-        p2n = p2n_half
+            csd += "0"  # No change needed
+        p2n = p2n_half  # Move to next lower power of 2
     return csd
 
 
@@ -161,21 +167,21 @@ def to_decimal_using_pow(csd: str) -> float:
         >>> to_decimal_using_pow("0.+")
         0.5
     """
-
     decimal_value: float = 0.0
-    loc: int = 0
+    loc: int = 0  # Tracks position of decimal point
     for pos, digit in enumerate(csd):
         if digit == "0":
-            decimal_value *= 2.0
+            decimal_value *= 2.0  # Shift left (multiply by 2)
         elif digit == "+":
-            decimal_value = decimal_value * 2.0 + 1.0
+            decimal_value = decimal_value * 2.0 + 1.0  # Shift left and add 1
         elif digit == "-":
-            decimal_value = decimal_value * 2.0 - 1.0
+            decimal_value = decimal_value * 2.0 - 1.0  # Shift left and subtract 1
         elif digit == ".":
-            loc = pos + 1
+            loc = pos + 1  # Mark decimal point position
         else:
             raise ValueError(ERROR1)
     if loc != 0:
+        # Adjust for fractional part by dividing by appropriate power of 2
         decimal_value /= pow(2.0, len(csd) - loc)
 
     return decimal_value
@@ -186,32 +192,32 @@ def to_decimal_integral(csd: str) -> Tuple[int, int]:
     decimal_value: int = 0
     for pos, digit in enumerate(csd):
         if digit == "0":
-            decimal_value <<= 1
+            decimal_value <<= 1  # Bit shift left (equivalent to *2)
         elif digit == "+":
-            decimal_value = (decimal_value << 1) + 1
+            decimal_value = (decimal_value << 1) + 1  # Shift left and add 1
         elif digit == "-":
-            decimal_value = (decimal_value << 1) - 1
+            decimal_value = (decimal_value << 1) - 1  # Shift left and subtract 1
         elif digit == ".":
-            return decimal_value, pos + 1
+            return decimal_value, pos + 1  # Return value and decimal position
         else:
             raise ValueError(ERROR1)
-    return decimal_value, 0
+    return decimal_value, 0  # Return value and 0 if no decimal point found
 
 
 def to_decimal_fractional(csd: str) -> float:
     """Handle fractional part of CSD string."""
     decimal_value = 0.0
-    scale = 0.5
+    scale = 0.5  # Start with 1/2 for first digit after decimal
     for digit in csd:
         if digit == "0":
-            pass
+            pass  # No change to value
         elif digit == "+":
-            decimal_value += scale
+            decimal_value += scale  # Add current place value
         elif digit == "-":
-            decimal_value -= scale
+            decimal_value -= scale  # Subtract current place value
         else:
             raise ValueError(ERROR1)
-        scale /= 2.0
+        scale /= 2.0  # Move to next fractional place (1/4, 1/8, etc.)
     return decimal_value
 
 
@@ -239,12 +245,14 @@ def to_decimal(csd: str) -> float:
         >>> to_decimal("0.+")
         0.5
     """
+    # First process integral part (before decimal point)
     integral, loc = to_decimal_integral(csd)
     if loc == 0:
-        return integral
+        return integral  # If no decimal point, return integer part
 
+    # Then process fractional part (after decimal point)
     fractional = to_decimal_fractional(csd[loc:])
-    return integral + fractional
+    return integral + fractional  # Combine both parts
 
 
 def to_csdnnz(decimal_value: float, nnz: int) -> str:
@@ -284,24 +292,25 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
         rem = ceil(log(absnum * 1.5, 2))
         csd = ""
     p2n = pow(2, rem)
+    # Process until we've used all non-zero digits or reached zero
     while rem > 0 or (nnz > 0 and fabs(decimal_value) > 1e-100):
         if rem == 0:
-            csd += "."
+            csd += "."  # Add decimal point when we reach fractional part
         p2n /= 2
         rem -= 1
         det = 1.5 * decimal_value
         if det > p2n:
             csd += "+"
             decimal_value -= p2n
-            nnz -= 1
+            nnz -= 1  # Decrement non-zero digit count
         elif det < -p2n:
             csd += "-"
             decimal_value += p2n
-            nnz -= 1
+            nnz -= 1  # Decrement non-zero digit count
         else:
             csd += "0"
         if nnz == 0:
-            decimal_value = 0.0
+            decimal_value = 0.0  # Stop processing if no more non-zero digits allowed
     return csd
 
 
@@ -346,20 +355,20 @@ def to_csdnnz_i(decimal_value: int, nnz: int) -> str:
     while p2n > 1:
         # convert the number
         p2n_half = p2n >> 1
-        det = 3 * decimal_value
+        det = 3 * decimal_value  # Decision threshold (3x for integer version)
         if det > p2n:
             csd += "+"
             decimal_value -= p2n_half
-            nnz -= 1
+            nnz -= 1  # Decrement non-zero digit count
         elif det < -p2n:
             csd += "-"
             decimal_value += p2n_half
-            nnz -= 1
+            nnz -= 1  # Decrement non-zero digit count
         else:
             csd += "0"
         p2n = p2n_half
         if nnz == 0:
-            decimal_value = 0.0
+            decimal_value = 0.0  # Stop processing if no more non-zero digits allowed
     return csd
 
 

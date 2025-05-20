@@ -28,6 +28,7 @@ __author__ = "Wai-Shing Luk"
 __copyright__ = "Wai-Shing Luk"
 __license__ = "MIT"
 
+# Initialize logger for the module
 _logger = logging.getLogger(__name__)
 
 
@@ -47,12 +48,17 @@ def parse_args(args):
     Returns:
       :obj:`argparse.Namespace`: command line parameters namespace
     """
+    # Create argument parser with program description
     parser = argparse.ArgumentParser(description="Converts a decimal to a CSD format")
+    
+    # Add version information argument
     parser.add_argument(
         "--version",
         action="version",
         version="csdigit {ver}".format(ver=__version__),
     )
+    
+    # Add conversion options with type checking and default values
     parser.add_argument(
         "-c",
         "--to_csd",
@@ -60,7 +66,7 @@ def parse_args(args):
         help="a decimal number",
         type=float,
         metavar="FLOAT",
-        default=float("Inf"),
+        default=float("Inf"),  # Use infinity as sentinel value
     )
     parser.add_argument(
         "-f",
@@ -78,8 +84,10 @@ def parse_args(args):
         help="a CSD string",
         type=str,
         metavar="STR",
-        default="",
+        default="",  # Empty string as sentinel value
     )
+    
+    # Add precision control parameters
     parser.add_argument(
         "-p",
         "--places",
@@ -98,6 +106,8 @@ def parse_args(args):
         metavar="INT",
         default=4,
     )
+    
+    # Add logging level control arguments
     parser.add_argument(
         "-v",
         "--verbose",
@@ -123,6 +133,7 @@ def setup_logging(loglevel) -> None:
     Args:
       loglevel (int): minimum loglevel for emitting messages
     """
+    # Configure logging format and output stream
     logformat = "[%(asctime)s] %(levelname)s:%(name)s:%(message)s"
     logging.basicConfig(
         level=loglevel,
@@ -145,6 +156,8 @@ def main(args) -> None:
     args = parse_args(args)
     setup_logging(args.loglevel)
     _logger.debug("Starting crazy calculations...")
+    
+    # Check which conversion option was specified and execute corresponding function
     if args.decimal != float("Inf"):
         ans = to_csd(args.decimal, args.places)
         print(f"{ans}")
@@ -154,6 +167,7 @@ def main(args) -> None:
     if args.csdstr != "":
         ans = to_decimal(args.csdstr)
         print(f"{ans}")
+        
     _logger.info("Script ends here")
 
 
@@ -162,14 +176,13 @@ def run() -> None:
 
     This function can be used as entry point to create console scripts with setuptools.
     """
+    # Pass all arguments except the script name
     main(sys.argv[1:])
 
 
 if __name__ == "__main__":
-    # ^  This is a guard statement that will prevent the following code from
-    #    being executed in the case someone imports this file instead of
-    #    executing it as a script.
-    #    https://docs.python.org/3/library/__main__.html
+    # Guard clause to prevent script execution when imported as module
+    # https://docs.python.org/3/library/__main__.html
 
     # After installing your project with pip, users can also run your Python
     # modules as scripts via the ``-m`` flag, as defined in PEP 338::
