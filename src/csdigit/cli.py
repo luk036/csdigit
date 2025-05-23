@@ -50,14 +50,14 @@ def parse_args(args):
     """
     # Create argument parser with program description
     parser = argparse.ArgumentParser(description="Converts a decimal to a CSD format")
-    
+
     # Add version information argument
     parser.add_argument(
         "--version",
         action="version",
         version="csdigit {ver}".format(ver=__version__),
     )
-    
+
     # Add conversion options with type checking and default values
     parser.add_argument(
         "-c",
@@ -86,7 +86,7 @@ def parse_args(args):
         metavar="STR",
         default="",  # Empty string as sentinel value
     )
-    
+
     # Add precision control parameters
     parser.add_argument(
         "-p",
@@ -106,7 +106,7 @@ def parse_args(args):
         metavar="INT",
         default=4,
     )
-    
+
     # Add logging level control arguments
     parser.add_argument(
         "-v",
@@ -156,7 +156,7 @@ def main(args) -> None:
     args = parse_args(args)
     setup_logging(args.loglevel)
     _logger.debug("Starting crazy calculations...")
-    
+
     # Check which conversion option was specified and execute corresponding function
     if args.decimal != float("Inf"):
         ans = to_csd(args.decimal, args.places)
@@ -167,7 +167,7 @@ def main(args) -> None:
     if args.csdstr != "":
         ans = to_decimal(args.csdstr)
         print(f"{ans}")
-        
+
     _logger.info("Script ends here")
 
 
