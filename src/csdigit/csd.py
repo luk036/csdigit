@@ -368,7 +368,7 @@ def to_csdnnz_i(decimal_value: int, nnz: int) -> str:
             csd += "0"
         p2n = p2n_half
         if nnz == 0:
-            decimal_value = 0.0  # Stop processing if no more non-zero digits allowed
+            decimal_value = 0  # Stop processing if no more non-zero digits allowed
     return csd
 
 
