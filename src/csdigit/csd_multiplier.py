@@ -29,8 +29,8 @@ def generate_csd_multiplier(csd, N, M):
     # Generate module header
     verilog_code = f"""
 module csd_multiplier (
-    input signed [{N-1}:0] x,      // Input value
-    output signed [{N+M-1}:0] result // Result of multiplication
+    input signed [{N - 1}:0] x,      // Input value
+    output signed [{N + M - 1}:0] result // Result of multiplication
 );"""
 
     # Generate shifted versions
@@ -38,7 +38,7 @@ module csd_multiplier (
         verilog_code += "\n\n    // Create shifted versions of input"
         powers_needed = {p for p, op in terms}
         for p in sorted(powers_needed, reverse=True):
-            verilog_code += f"\n    wire signed [{N+M-1}:0] x_shift{p} = x <<< {p};"
+            verilog_code += f"\n    wire signed [{N + M - 1}:0] x_shift{p} = x <<< {p};"
 
     # Generate the computation
     verilog_code += "\n\n    // CSD implementation"
