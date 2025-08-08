@@ -25,6 +25,10 @@ def test_to_decimal_using_pow():
 
 def test_to_decimal():
     assert to_decimal("+00-00.+") == 28.5
+    assert to_decimal("0") == 0
+    assert to_decimal("0.0") == 0.0
+    assert to_decimal("-0.0") == -2.0
+    assert to_decimal("+0.-") == 1.5
     with pytest.raises(ValueError):
         to_decimal("+00-00.+XXX00+")
     with pytest.raises(ValueError):
@@ -36,6 +40,8 @@ def test_to_csd():
     assert to_csd(-0.5, 2) == "0.-0"
     assert to_csd(0.0, 0) == "0."
     assert to_csd(28.5, 0) == "+00-00."
+    assert to_csd(-28.5, 2) == "-00+00.-0"
+
 
 
 def test_to_csdnn():
@@ -50,6 +56,8 @@ def test_to_csdnn_i():
     assert to_csdnnz_i(-0, 4) == "0"
     assert to_csdnnz_i(0, 4) == "0"
     assert to_csdnnz_i(158, 2) == "+0+00000"
+    assert to_csdnnz_i(-28, 4) == "-00+00"
+
 
 
 @given(integers())
