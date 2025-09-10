@@ -29,7 +29,6 @@ Overall, this code provides a comprehensive set of tools for working with CSD re
 """
 
 from math import ceil, fabs, log
-from typing import Tuple
 
 ERROR1 = "Work with 0, +, -, and . only"
 ERROR2 = "Work with 0, +, and - only"
