@@ -31,9 +31,9 @@ The library contains a number of functions, each with a specific role.
 
 3. The functions to_decimal_using_pow and to_decimal perform the inverse of the to_csd function. They accept a CSD string as input and return a decimal number.
 
-4. The to_csdnnz function is a variant of the to_csd function that allows the user to specify the maximum number of non-zero digits in the result. 
+4. The to_csdnnz function is a variant of the to_csd function that allows the user to specify the maximum number of non-zero digits in the result.
 
-5. The to_csdnnz_i function is a variant of the to_csd_i function that allows the user to specify the maximum number of non-zero digits in the result. 
+5. The to_csdnnz_i function is a variant of the to_csd_i function that allows the user to specify the maximum number of non-zero digits in the result.
 
 The library fulfills its intended function through a sequence of mathematical operations and logical tests. In order to effect a conversion from decimal to CSD, the system employs the use of powers of 2 in order to ascertain which of the three symbols (+, -, or 0) is to be used at each position within the CSD string. The algorithm then performs repeated divisions of the input number by two and compares the result to specific thresholds to determine the appropriate symbol to use.
 

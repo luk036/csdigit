@@ -1,4 +1,5 @@
 import pytest
+
 from csdigit.csd_multiplier import generate_csd_multiplier
 
 
