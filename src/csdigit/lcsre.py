@@ -1,9 +1,16 @@
 """
 Longest Repeated Substring Finder
 
-This code defines a function called longest_repeated_substring that finds the longest repeated non-overlapping substring within a given string. The purpose of this code is to identify and return the longest sequence of characters that appears more than once in the input string, without the repetitions overlapping each other.
+This code defines a function called longest_repeated_substring that finds the longest repeated
+non-overlapping substring within a given string. The purpose of this code is to identify and return the
+longest sequence of characters that appears more than once in the input string, without the repetitions
+overlapping each other.
 
-The function takes a single input: a string called cs, which represents the text in which we want to find the repeated substring. The output of the function is another string, which is the longest repeated non-overlapping substring found in the input.
+The function takes a single input: a string called cs, which represents the text in which we want to
+
+find the repeated substring. The output of the function is another string, which is the longest repeated
+
+non-overlapping substring found in the input.
 
 To achieve its purpose, the code uses a dynamic programming approach. It creates a 2D table (called LCSRe) to keep track of the lengths of repeated substrings at different positions in the input string. The algorithm then iterates through this table, comparing characters and updating the lengths of repeated substrings it finds.
 
@@ -19,7 +26,10 @@ An important aspect of this algorithm is that it avoids overlapping substrings. 
 
 The code also includes a simple example usage, where it applies the function to the string "+-00+-00+-00+-0". This demonstrates how the function can be used and what kind of output it produces.
 
-In summary, this code provides a way to find the longest sequence of characters that repeats in a given text, which can be useful in various text processing and analysis tasks. It uses a clever approach to solve what could otherwise be a computationally expensive problem, making it efficient for longer input strings.
+In summary, this code provides a way to find the longest sequence of characters that repeats in a given
+text, which can be useful in various text processing and analysis tasks. It uses a clever approach to
+solve what could otherwise be a computationally expensive problem, making it efficient for longer input
+strings.
 """
 
 # Python 3 program to find the longest repeated

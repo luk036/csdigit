@@ -165,8 +165,7 @@ def main(args) -> None:
         ans = to_csdnnz(args.decimal2, args.nnz)
         print(f"{ans}")
     if args.csdstr != "":
-        ans = to_decimal(args.csdstr)
-        print(f"{ans}")
+        print(f"{to_decimal(args.csdstr)}")
 
     _logger.info("Script ends here")
 

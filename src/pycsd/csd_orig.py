@@ -15,7 +15,7 @@ Harnesser
 License: GPL2
 """
 
-from math import *
+from math import ceil, fabs, log, pow
 
 
 def to_csd(num, places=0):
@@ -33,7 +33,6 @@ def to_csd(num, places=0):
 
     # Hone in on the CSD code for the input number
     remainder = num
-    previous_non_zero = False
     n -= 1
 
     while n >= -places:
@@ -44,19 +43,15 @@ def to_csd(num, places=0):
             csd_digits.extend(["."])
 
         # convert the number
-        if previous_non_zero:
             csd_digits.extend(["0"])
-            prev_non_zero = False
 
         elif remainder > limit:
             csd_digits.extend(["+"])
             remainder -= pow(2.0, n)
-            prev_non_zero = True
 
         elif remainder < -limit:
             csd_digits.extend(["-"])
             remainder += pow(2.0, n)
-            prev_non_zero = True
 
         else:
             csd_digits.extend(["0"])

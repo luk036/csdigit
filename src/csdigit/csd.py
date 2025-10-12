@@ -1,9 +1,14 @@
 """
 Canonical Signed Digit (CSD) Conversion
 
-This code is all about converting numbers between decimal format and a special representation called Canonical Signed Digit (CSD). CSD is a way of writing numbers using only three symbols: 0, +, and -. It's particularly useful in certain areas of computer science and digital signal processing.
+This code is all about converting numbers between decimal format and a special representation called
+Canonical Signed Digit (CSD). CSD is a way of writing numbers using only three symbols: 0, +, and -.
+It's particularly useful in certain areas of computer science and digital signal processing.
 
-The main purpose of this code is to provide functions that can convert decimal numbers to CSD format and vice versa. It takes in regular decimal numbers (like 28.5 or -0.5) and converts them to CSD strings (like "+00-00.+" or "0.-"), and it can also do the reverse, taking CSD strings and converting them back to decimal numbers.
+The main purpose of this code is to provide functions that can convert decimal numbers to CSD format and
+vice versa. It takes in regular decimal numbers (like 28.5 or -0.5) and converts them to CSD strings
+(like "+00-00.+" or "0.-"), and it can also do the reverse, taking CSD strings and converting them back
+to decimal numbers.
 
 The code contains several functions, each with a specific role:
 
@@ -17,7 +22,10 @@ The code contains several functions, each with a specific role:
 
 4. to_csdnnz_i: This function is a variation of to_csd_i that allows you to specify the maximum number of non-zero digits in the result.
 
-The code achieves its purpose through a series of mathematical operations and logical checks. For the decimal to CSD conversion, it uses powers of 2 to determine which symbols (+, -, or 0) to use at each position in the CSD string. It repeatedly divides the input number by 2 and checks if it's greater than, less than, or close to certain thresholds to decide which symbol to use.
+The code achieves its purpose through a series of mathematical operations and logical checks. For the
+decimal to CSD conversion, it uses powers of 2 to determine which symbols (+, -, or 0) to use at each
+position in the CSD string. It repeatedly divides the input number by 2 and checks if it's greater than,
+less than, or close to certain thresholds to decide which symbol to use.
 
 For the CSD to decimal conversion, it goes through each symbol in the CSD string, multiplying the running total by 2 and adding 1, subtracting 1, or doing nothing based on whether the symbol is +, -, or 0.
 
@@ -236,13 +244,13 @@ def to_decimal(csd: str) -> float:
         return integral
 
     integral_part, fractional_part = csd.split(".", 1)
-    integral: float = 0.0
+    integral_float: float = 0.0
     for digit in integral_part:
-        integral *= 2.0
+        integral_float *= 2.0
         if digit == "+":
-            integral += 1.0
+            integral_float += 1.0
         elif digit == "-":
-            integral -= 1.0
+            integral_float -= 1.0
         elif digit != "0":
             raise ValueError(ERROR1)
 
@@ -257,7 +265,7 @@ def to_decimal(csd: str) -> float:
             raise ValueError(ERROR1)
         scale /= 2.0
 
-    return integral + fractional
+    return integral_float + fractional
 
 
 def to_csdnnz(decimal_value: float, nnz: int) -> str:
