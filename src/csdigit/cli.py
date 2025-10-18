@@ -20,6 +20,7 @@ References:
 import argparse
 import logging
 import sys
+from typing import List
 
 from csdigit import __version__
 from csdigit.csd import to_csd, to_csdnnz, to_decimal
@@ -38,7 +39,7 @@ _logger = logging.getLogger(__name__)
 # executable/script.
 
 
-def parse_args(args):
+def parse_args(args: List[str]) -> argparse.Namespace:
     """Parse command line parameters
 
     Args:
@@ -127,7 +128,7 @@ def parse_args(args):
     return parser.parse_args(args)
 
 
-def setup_logging(loglevel) -> None:
+def setup_logging(loglevel: int) -> None:
     """Setup basic logging
 
     Args:
@@ -143,7 +144,7 @@ def setup_logging(loglevel) -> None:
     )
 
 
-def main(args) -> None:
+def main(args: List[str]) -> None:
     """Wrapper allowing :func:`fib` to be called with string arguments in a CLI fashion
 
     Instead of returning the value from :func:`fib`, it prints the result to the
@@ -153,19 +154,19 @@ def main(args) -> None:
       args (List[str]): command line parameters as list of strings
           (for example  ``["--verbose", "42"]``).
     """
-    args = parse_args(args)
-    setup_logging(args.loglevel)
+    parsed_args = parse_args(args)
+    setup_logging(parsed_args.loglevel)
     _logger.debug("Starting crazy calculations...")
 
     # Check which conversion option was specified and execute corresponding function
-    if args.decimal != float("Inf"):
-        ans = to_csd(args.decimal, args.places)
+    if parsed_args.decimal != float("Inf"):
+        ans = to_csd(parsed_args.decimal, parsed_args.places)
         print(f"{ans}")
-    if args.decimal2 != float("Inf"):
-        ans = to_csdnnz(args.decimal2, args.nnz)
+    if parsed_args.decimal2 != float("Inf"):
+        ans = to_csdnnz(parsed_args.decimal2, parsed_args.nnz)
         print(f"{ans}")
-    if args.csdstr != "":
-        print(f"{to_decimal(args.csdstr)}")
+    if parsed_args.csdstr != "":
+        print(f"{to_decimal(parsed_args.csdstr)}")
 
     _logger.info("Script ends here")
 
