@@ -28,10 +28,7 @@ sys.path.insert(0, os.path.join(__location__, "../src"))
 # setup.py install" in the RTD Advanced Settings.
 # Additionally it helps us to avoid running apidoc manually
 
-try:  # for Sphinx >= 1.7
-    from sphinx.ext import apidoc
-except ImportError:
-    from sphinx import apidoc
+from sphinx.ext import apidoc
 
 output_dir = os.path.join(__location__, "api")
 module_dir = os.path.join(__location__, "../src/csdigit")
