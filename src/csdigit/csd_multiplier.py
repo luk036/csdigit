@@ -1,4 +1,4 @@
-def generate_csd_multiplier(csd, N, M):
+def generate_csd_multiplier(csd: str, N: int, M: int) -> str:
     """
     Generate Verilog code for a CSD multiplier module with proper signed handling.
 
