@@ -106,6 +106,7 @@ def test_generate_csd_multiplier_invalid_chars():
 
 def test_generate_csd_multiplier_invalid_length():
     with pytest.raises(
-        ValueError, match="CSD length 3 doesn't match M=3 \(should be M\\+1\)"
+        ValueError,
+        match="CSD length 3 doesn't match M=3 \(should be M\\+1\)",  # ???
     ):
         generate_csd_multiplier("+0-", 8, 3)

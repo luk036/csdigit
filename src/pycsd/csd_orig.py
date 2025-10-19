@@ -42,7 +42,7 @@ def to_csd(num, places=0):
         if n == -1:
             csd_digits.extend(["."])
 
-        # convert the number
+            # convert the number
             csd_digits.extend(["0"])
 
         elif remainder > limit:

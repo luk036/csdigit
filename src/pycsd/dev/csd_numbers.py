@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-""" Convert some CSD numbers to get a feel for the range. """
+"""Convert some CSD numbers to get a feel for the range."""
 
 import sys
 

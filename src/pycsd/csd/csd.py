@@ -1,18 +1,18 @@
 #! /usr/bin/env python
 """
- Canonical Signed Digit Functions
+Canonical Signed Digit Functions
 
- Handles:
-  * Decimals
-  *
-  *
+Handles:
+ * Decimals
+ *
+ *
 
- eg, +00-00+000.0 or 0.+0000-00+
- Where: '+' is +1
-        '-' is -1
+eg, +00-00+000.0 or 0.+0000-00+
+Where: '+' is +1
+       '-' is -1
 
- Harnesser
- License: GPL2
+Harnesser
+License: GPL2
 """
 
 from math import ceil, fabs, log, pow
