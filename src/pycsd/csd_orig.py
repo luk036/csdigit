@@ -55,7 +55,6 @@ def to_csd(num, places=0):
 
         else:
             csd_digits.extend(["0"])
-            prev_non_zero = False
 
         n -= 1
 
@@ -78,7 +77,6 @@ def to_decimal(csd_str):
         csd_str = csd_str.replace(".", "")  # get rid of point now...
     except ValueError:
         m = csd_str
-        n = ""
 
     msb_power = len(m) - 1
 
