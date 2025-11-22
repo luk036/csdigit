@@ -37,9 +37,7 @@ Overall, this code provides a comprehensive set of tools for working with CSD re
 """
 
 from math import ceil, fabs, log
-
-ERROR1 = "Work with 0, +, -, and . only"
-ERROR2 = "Work with 0, +, and - only"
+import logging
 
 
 def to_csd(decimal_value: float, places: int) -> str:
@@ -92,6 +90,7 @@ def to_csd(decimal_value: float, places: int) -> str:
         elif det < -p2n:
             csd_list.append("-")
             decimal_value += p2n
+            logging.debug(f"decimal_value = {decimal_value}")
         else:
             csd_list.append("0")
 
@@ -199,7 +198,8 @@ def to_decimal_using_pow(csd: str) -> float:
         elif digit == ".":
             loc = pos + 1  # Mark decimal point position
         else:
-            raise ValueError(ERROR1)
+            logging.info(f"Encounter unknown character {digit}")
+            # raise ValueError(ERROR1)
     if loc != 0:
         # Adjust for fractional part by dividing by appropriate power of 2
         decimal_value /= pow(2.0, len(csd) - loc)
@@ -240,7 +240,8 @@ def to_decimal(csd: str) -> float:
             elif digit == "-":
                 integral -= 1
             elif digit != "0":
-                raise ValueError(ERROR1)
+                logging.info(f"Encounter unknown character {digit}")
+                # raise ValueError(ERROR1)
         return integral
 
     integral_part, fractional_part = csd.split(".", 1)
@@ -252,7 +253,8 @@ def to_decimal(csd: str) -> float:
         elif digit == "-":
             integral_float -= 1.0
         elif digit != "0":
-            raise ValueError(ERROR1)
+            logging.info(f"Encounter unknown character {digit}")
+            # raise ValueError(ERROR1)
 
     fractional: float = 0.0
     scale = 0.5
@@ -262,7 +264,8 @@ def to_decimal(csd: str) -> float:
         elif digit == "-":
             fractional -= scale
         elif digit != "0":
-            raise ValueError(ERROR1)
+            logging.info(f"Encounter unknown character {digit}")
+            # raise ValueError(ERROR1)
         scale /= 2.0
 
     return integral_float + fractional

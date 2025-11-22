@@ -187,6 +187,6 @@ if __name__ == "__main__":
     # After installing your project with pip, users can also run your Python
     # modules as scripts via the ``-m`` flag, as defined in PEP 338::
     #
-    #     python -m csdigit.to_csd 42
+    #     python -m csdigit.cli --to_csd 42
     #
     run()
