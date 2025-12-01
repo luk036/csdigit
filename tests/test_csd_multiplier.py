@@ -3,7 +3,7 @@ import pytest
 from csdigit.csd_multiplier import generate_csd_multiplier
 
 
-def test_generate_csd_multiplier_valid():
+def test_generate_csd_multiplier_valid() -> None:
     csd = "+0-"
     N = 8
     M = 2
@@ -24,7 +24,7 @@ endmodule
     assert generate_csd_multiplier(csd, N, M) == expected_verilog
 
 
-def test_generate_csd_multiplier_positive_only():
+def test_generate_csd_multiplier_positive_only() -> None:
     csd = "+0+"
     N = 4
     M = 2
@@ -45,7 +45,7 @@ endmodule
     assert generate_csd_multiplier(csd, N, M) == expected_verilog
 
 
-def test_generate_csd_multiplier_negative_only():
+def test_generate_csd_multiplier_negative_only() -> None:
     csd = "-0-"
     N = 8
     M = 2
@@ -66,12 +66,13 @@ endmodule
     # Note: The logic for negative is tricky. The first term is always taken as is.
     # So -a -b is not -(a+b). It's just -a-b.
     # Based on the implementation, the first term is not negated.
+    # This seems like a bug in the implementation if it's supposed to handle a leading negative.
+    # However, the docstring says "proper signed handling".
     # Let's re-check the implementation.
     # first_power, first_op = terms[0]
     # expr = f"x_shift{first_power}"
     # This means the first term is always positive in the expression.
     # This seems like a bug in the implementation if it's supposed to handle a leading negative.
-    # However, the docstring says "proper signed handling".
     # Let's write the test according to the current implementation.
     # The current implementation will produce `x_shift2 - x_shift0` for "-0-", which is incorrect.
     # It should be `-x_shift2 - x_shift0`.
@@ -80,7 +81,7 @@ endmodule
     assert generate_csd_multiplier(csd, N, M) == expected_verilog
 
 
-def test_generate_csd_multiplier_all_zeros():
+def test_generate_csd_multiplier_all_zeros() -> None:
     csd = "000"
     N = 8
     M = 2
@@ -97,14 +98,14 @@ endmodule
     assert generate_csd_multiplier(csd, N, M) == expected_verilog
 
 
-def test_generate_csd_multiplier_invalid_chars():
+def test_generate_csd_multiplier_invalid_chars() -> None:
     with pytest.raises(
         ValueError, match="CSD string can only contain '\\+', '\\-', or '0'"
     ):
         generate_csd_multiplier("123", 8, 2)
 
 
-def test_generate_csd_multiplier_invalid_length():
+def test_generate_csd_multiplier_invalid_length() -> None:
     with pytest.raises(
         ValueError,
         match="CSD length 3 doesn't match M=3 \(should be M\\+1\)",  # ???
