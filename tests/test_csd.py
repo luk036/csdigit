@@ -68,6 +68,7 @@ def test_to_csd_debug(caplog):
     caplog.set_level(logging.DEBUG)
     assert to_csd(28.5, 2) == "+00-00.+0"
 
+
 @given(integers())
 def test_csd_i(number):
     assert number == to_decimal(to_csd_i(number))
