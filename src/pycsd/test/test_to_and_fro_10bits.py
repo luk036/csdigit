@@ -1379,7 +1379,7 @@ good_values_dict = {
 
 
 class tests__to_and_fro_10bits(unittest.TestCase):
-    def test__01_to_integer(self):
+    def test__01_to_integer(self) -> None:
         """Check conversion from CSD to integer"""
 
         for key in good_values_dict.keys():
@@ -1387,7 +1387,7 @@ class tests__to_and_fro_10bits(unittest.TestCase):
             value = csd.to_decimal(csd_str)
             self.assertEquals(value, key)
 
-    def test__02_to_csd(self):
+    def test__02_to_csd(self) -> None:
         """Check that integers are converted to CSD properly."""
 
         for key in good_values_dict.keys():

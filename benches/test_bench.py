@@ -14,9 +14,9 @@ def run_csd_orig():
     assert a == b
 
 
-def test_csd(benchmark):
+def test_csd(benchmark) -> None:
     benchmark(run_csd)
 
 
-def test_csd_orig(benchmark):
+def test_csd_orig(benchmark) -> None:
     benchmark(run_csd_orig)

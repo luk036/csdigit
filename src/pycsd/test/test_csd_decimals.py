@@ -21,7 +21,7 @@ class tests__decimals(unittest.TestCase):
     def tmp(self):
         pass
 
-    def test__01_to_decimal(self):
+    def test__01_to_decimal(self) -> None:
         """Check the conversion from CSD with a binary point to decimal."""
 
         for key in good_values_dict.keys():
@@ -29,26 +29,26 @@ class tests__decimals(unittest.TestCase):
             value = csd.to_decimal(csd_str)
             self.assertEquals(value, key)
 
-    def test__01a_to_decimal(self):
+    def test__01a_to_decimal(self) -> None:
         self.assertEquals(csd.to_decimal("0.+00-"), 0.5 - (2.0**-4))
         self.assertEquals(csd.to_decimal("0.0+0-"), 0.25 - (2.0**-4))
         self.assertEquals(csd.to_decimal("0.+0-0"), 0.5 - (2.0**-3))
 
-    def test__02_to_csd_1_place(self):
+    def test__02_to_csd_1_place(self) -> None:
         """Check that decimals are converted to CSD properly."""
 
         for key in good_values_dict.keys():
             csd_str = csd.to_csd(key, places=1)
             self.assertEquals(csd_str, good_values_dict[key])
 
-    def test__03_to_csd_4_places(self):
+    def test__03_to_csd_4_places(self) -> None:
         """To four places"""
         self.assertEquals(csd.to_csd(0.0625, 4), "0.000+")
         self.assertEquals(csd.to_csd(-0.0625, 4), "0.000-")
         self.assertEquals(csd.to_csd(0.25, 4), "0.0+00")
         self.assertEquals(csd.to_csd(-0.25, 4), "0.0-00")
 
-    def test__04_to_csd_x_places(self):
+    def test__04_to_csd_x_places(self) -> None:
         """To four places"""
         self.assertEquals(csd.to_csd(0.0625, 4), "0.000+")
         self.assertEquals(csd.to_csd(-0.0625, 4), "0.000-")
