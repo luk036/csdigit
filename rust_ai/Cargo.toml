@@ -1,0 +1,28 @@
+[package]
+name = "csdigit"
+version = "0.1.0"
+edition = "2021"
+description = "Canonical Signed Digit (CSD) conversion library in Rust"
+authors = ["Wai-Shing Luk <luk036@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/luk036/csdigit"
+readme = "README.md"
+keywords = ["csd", "signed-digit", "digital-signal-processing", "verilog"]
+categories = ["algorithms", "science", "embedded"]
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+log = "0.4"
+env_logger = "0.10"
+anyhow = "1.0"
+
+[dev-dependencies]
+rstest = "0.18"
+
+[[bin]]
+name = "csdigit"
+path = "src/bin/main.rs"
+
+[lib]
+name = "csdigit"
+path = "src/lib.rs"
