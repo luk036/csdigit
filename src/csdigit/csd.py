@@ -73,23 +73,23 @@ def to_csd(decimal_value: float, places: int) -> str:
 
     abs_val = fabs(decimal_value)
     if abs_val < 1.0:
-        rem = 0
+        remainder = 0
         csd_list = ["0"]
     else:
-        rem = int(ceil(log(abs_val * 1.5, 2)))
+        remainder = int(ceil(log(abs_val * 1.5, 2)))
         csd_list = []
 
-    p2n = pow(2.0, rem)
+    power_of_two = pow(2.0, remainder)
 
-    for _ in range(rem):
-        p2n /= 2.0
-        det = 1.5 * decimal_value
-        if det > p2n:
+    for _ in range(remainder):
+        power_of_two /= 2.0
+        determinant = 1.5 * decimal_value
+        if determinant > power_of_two:
             csd_list.append("+")
-            decimal_value -= p2n
-        elif det < -p2n:
+            decimal_value -= power_of_two
+        elif determinant < -power_of_two:
             csd_list.append("-")
-            decimal_value += p2n
+            decimal_value += power_of_two
             logging.debug(f"decimal_value = {decimal_value}")
         else:
             csd_list.append("0")
@@ -97,14 +97,14 @@ def to_csd(decimal_value: float, places: int) -> str:
     csd_list.append(".")
 
     for _ in range(places):
-        p2n /= 2.0
-        det = 1.5 * decimal_value
-        if det > p2n:
+        power_of_two /= 2.0
+        determinant = 1.5 * decimal_value
+        if determinant > power_of_two:
             csd_list.append("+")
-            decimal_value -= p2n
-        elif det < -p2n:
+            decimal_value -= power_of_two
+        elif determinant < -power_of_two:
             csd_list.append("-")
-            decimal_value += p2n
+            decimal_value += power_of_two
         else:
             csd_list.append("0")
 
@@ -135,21 +135,21 @@ def to_csd_i(decimal_value: int) -> str:
     if decimal_value == 0:
         return "0"
 
-    rem = (abs(decimal_value) * 3 // 2).bit_length()
-    p2n = 1 << rem
+    remainder = (abs(decimal_value) * 3 // 2).bit_length()
+    power_of_two = 1 << remainder
     csd_list = []
-    while p2n > 1:
-        p2n_half = p2n >> 1
-        det = 3 * decimal_value
-        if det > p2n:
+    while power_of_two > 1:
+        power_of_two_half = power_of_two >> 1
+        determinant = 3 * decimal_value
+        if determinant > power_of_two:
             csd_list.append("+")
-            decimal_value -= p2n_half
-        elif det < -p2n:
+            decimal_value -= power_of_two_half
+        elif determinant < -power_of_two:
             csd_list.append("-")
-            decimal_value += p2n_half
+            decimal_value += power_of_two_half
         else:
             csd_list.append("0")
-        p2n = p2n_half
+        power_of_two = power_of_two_half
     return "".join(csd_list)
 
 
@@ -187,7 +187,7 @@ def to_decimal_using_pow(csd: str) -> float:
     #     stacklevel=2,
     # )
     decimal_value: float = 0.0
-    loc: int = 0  # Tracks position of decimal point
+    location: int = 0  # Tracks position of decimal point
     for pos, digit in enumerate(csd):
         if digit == "0":
             decimal_value *= 2.0  # Shift left (multiply by 2)
@@ -196,13 +196,13 @@ def to_decimal_using_pow(csd: str) -> float:
         elif digit == "-":
             decimal_value = decimal_value * 2.0 - 1.0  # Shift left and subtract 1
         elif digit == ".":
-            loc = pos + 1  # Mark decimal point position
+            location = pos + 1  # Mark decimal point position
         else:
             logging.info(f"Encounter unknown character {digit}")
             # raise ValueError(ERROR1)
-    if loc != 0:
+    if location != 0:
         # Adjust for fractional part by dividing by appropriate power of 2
-        decimal_value /= pow(2.0, len(csd) - loc)
+        decimal_value /= pow(2.0, len(csd) - location)
 
     return decimal_value
 
@@ -305,27 +305,27 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
 
     abs_val = fabs(decimal_value)
     if abs_val < 1.0:
-        rem = 0
+        remainder = 0
         csd_list = ["0"]
     else:
-        rem = ceil(log(abs_val * 1.5, 2))
+        remainder = ceil(log(abs_val * 1.5, 2))
         csd_list = []
 
-    p2n = pow(2, rem)
+    power_of_two = pow(2, remainder)
 
-    while rem > 0 or (nnz > 0 and fabs(decimal_value) > 1e-100):
-        if rem == 0:
+    while remainder > 0 or (nnz > 0 and fabs(decimal_value) > 1e-100):
+        if remainder == 0:
             csd_list.append(".")
-        p2n /= 2
-        rem -= 1
-        det = 1.5 * decimal_value
-        if nnz > 0 and det > p2n:
+        power_of_two /= 2
+        remainder -= 1
+        determinant = 1.5 * decimal_value
+        if nnz > 0 and determinant > power_of_two:
             csd_list.append("+")
-            decimal_value -= p2n
+            decimal_value -= power_of_two
             nnz -= 1
-        elif nnz > 0 and det < -p2n:
+        elif nnz > 0 and determinant < -power_of_two:
             csd_list.append("-")
-            decimal_value += p2n
+            decimal_value += power_of_two
             nnz -= 1
         else:
             csd_list.append("0")
@@ -367,23 +367,23 @@ def to_csdnnz_i(decimal_value: int, nnz: int) -> str:
     if decimal_value == 0:
         return "0"
 
-    rem = ceil(log(abs(decimal_value) * 1.5, 2))
-    p2n = pow(2, rem)
+    remainder = ceil(log(abs(decimal_value) * 1.5, 2))
+    power_of_two = pow(2, remainder)
     csd_list = []
-    while p2n > 1:
-        p2n_half = p2n >> 1
-        det = 3 * decimal_value
-        if nnz > 0 and det > p2n:
+    while power_of_two > 1:
+        power_of_two_half = power_of_two >> 1
+        determinant = 3 * decimal_value
+        if nnz > 0 and determinant > power_of_two:
             csd_list.append("+")
-            decimal_value -= p2n_half
+            decimal_value -= power_of_two_half
             nnz -= 1
-        elif nnz > 0 and det < -p2n:
+        elif nnz > 0 and determinant < -power_of_two:
             csd_list.append("-")
-            decimal_value += p2n_half
+            decimal_value += power_of_two_half
             nnz -= 1
         else:
             csd_list.append("0")
-        p2n = p2n_half
+        power_of_two = power_of_two_half
     return "".join(csd_list)
 
 

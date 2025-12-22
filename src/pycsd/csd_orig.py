@@ -18,28 +18,28 @@ License: GPL2
 from math import ceil, fabs, log, pow
 
 
-def to_csd(num, places=0):
+def to_csd(number, places=0):
     """Convert the argument to CSD Format."""
 
     # figure out binary range, special case for 0
-    if num == 0:
+    if number == 0:
         return "0"
-    if fabs(num) < 1.0:
-        n = 0
+    if fabs(number) < 1.0:
+        power = 0
     else:
-        n = ceil(log(fabs(num) * 3.0 / 2.0, 2))
+        power = ceil(log(fabs(number) * 3.0 / 2.0, 2))
 
     csd_digits = []
 
     # Hone in on the CSD code for the input number
-    remainder = num
-    n -= 1
+    remainder = number
+    power -= 1
 
-    while n >= -places:
-        limit = pow(2.0, n + 1) / 3.0
+    while power >= -places:
+        limit = pow(2.0, power + 1) / 3.0
 
         # decimal point?
-        if n == -1:
+        if power == -1:
             csd_digits.extend(["."])
 
             # convert the number
@@ -47,19 +47,19 @@ def to_csd(num, places=0):
 
         elif remainder > limit:
             csd_digits.extend(["+"])
-            remainder -= pow(2.0, n)
+            remainder -= pow(2.0, power)
 
         elif remainder < -limit:
             csd_digits.extend(["-"])
-            remainder += pow(2.0, n)
+            remainder += pow(2.0, power)
 
         else:
             csd_digits.extend(["0"])
 
-        n -= 1
+        power -= 1
 
     # Always have something before the point
-    if fabs(num) < 1.0:
+    if fabs(number) < 1.0:
         csd_digits.insert(0, "0")
 
     csd_str = "".join(csd_digits)
@@ -73,20 +73,20 @@ def to_decimal(csd_str):
     #  Find out what the MSB power of two should be, keeping in
     # mind we may have a fractional CSD number
     try:
-        (m, n) = csd_str.split(".")
+        (integral_part, fractional_part) = csd_str.split(".")
         csd_str = csd_str.replace(".", "")  # get rid of point now...
     except ValueError:
-        m = csd_str
+        integral_part = csd_str
 
-    msb_power = len(m) - 1
+    msb_power = len(integral_part) - 1
 
-    num = 0.0
-    for ii in range(len(csd_str)):
-        power_of_two = 2.0 ** (msb_power - ii)
+    number = 0.0
+    for index in range(len(csd_str)):
+        power_of_two = 2.0 ** (msb_power - index)
 
-        if csd_str[ii] == "+":
-            num += power_of_two
-        elif csd_str[ii] == "-":
-            num -= power_of_two
+        if csd_str[index] == "+":
+            number += power_of_two
+        elif csd_str[index] == "-":
+            number -= power_of_two
 
-    return num
+    return number

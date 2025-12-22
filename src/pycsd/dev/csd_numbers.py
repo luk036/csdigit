@@ -21,23 +21,23 @@ def is_proper_csd(csd_num):
     Returns false if the array contains consequitive non-zero terms.
     """
 
-    for i in range(1, len(csd_num)):
-        if csd_num[i] != "0" and csd_num[i - 1] != "0":
+    for index in range(1, len(csd_num)):
+        if csd_num[index] != "0" and csd_num[index - 1] != "0":
             return False
 
     return True
 
 
-def cycle_bits(i):
+def cycle_bits(index):
     global indent_
 
     indent_ += 2
 
     for ch in ("0", "-", "+"):
-        csd_num[i] = ch
+        csd_num[index] = ch
 
-        if i > 0:
-            cycle_bits(i - 1)
+        if index > 0:
+            cycle_bits(index - 1)
         else:
             if is_proper_csd(csd_num):
                 csd_str = "".join(csd_num)
