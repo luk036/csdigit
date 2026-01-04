@@ -42,6 +42,33 @@ def test_to_decimal(caplog: pytest.LogCaptureFixture) -> None:
     assert "Encounter unknown character" in caplog.text
 
 
+def test_to_decimal_with_invalid_chars_integral(caplog: pytest.LogCaptureFixture) -> None:
+    """Test to_decimal with invalid characters in integral part"""
+    caplog.set_level(logging.INFO)
+    # Test with invalid character in integral part (line 243)
+    result = to_decimal("+X0-00.+")
+    assert result == 28.5  # Should still produce a result
+    assert "Encounter unknown character" in caplog.text
+
+
+def test_to_decimal_with_invalid_chars_fractional(caplog: pytest.LogCaptureFixture) -> None:
+    """Test to_decimal with invalid characters in fractional part"""
+    caplog.set_level(logging.INFO)
+    # Test with invalid character in fractional part (line 256)
+    result = to_decimal("+00-00.+X")
+    assert result == 28.5  # Should still produce a result
+    assert "Encounter unknown character" in caplog.text
+
+
+def test_to_decimal_with_multiple_invalid_chars(caplog: pytest.LogCaptureFixture) -> None:
+    """Test to_decimal with multiple invalid characters"""
+    caplog.set_level(logging.INFO)
+    # Test with multiple invalid characters
+    result = to_decimal("+X0-X0.+X")
+    assert result == 28.5  # Should still produce a result
+    assert "Encounter unknown character" in caplog.text
+
+
 def test_to_csd() -> None:
     assert to_csd(28.5, 2) == "+00-00.+0"
     assert to_csd(-0.5, 2) == "0.-0"
