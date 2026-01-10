@@ -106,7 +106,14 @@ def to_decimal(csd_str, debug=False):
         if debug:
             print(
                 '  "%s" (%d.%d); 2**%d = %d; Num=%f'
-                % (csd_str[index], len(integral_part), len(fractional_part), msb_power - index, power_of_two, number)
+                % (
+                    csd_str[index],
+                    len(integral_part),
+                    len(fractional_part),
+                    msb_power - index,
+                    power_of_two,
+                    number,
+                )
             )
 
     return number

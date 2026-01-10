@@ -42,7 +42,9 @@ def test_to_decimal(caplog: pytest.LogCaptureFixture) -> None:
     assert "Encounter unknown character" in caplog.text
 
 
-def test_to_decimal_with_invalid_chars_integral(caplog: pytest.LogCaptureFixture) -> None:
+def test_to_decimal_with_invalid_chars_integral(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     """Test to_decimal with invalid characters in integral part"""
     caplog.set_level(logging.INFO)
     # Test with invalid character in integral part (line 243)
@@ -51,7 +53,9 @@ def test_to_decimal_with_invalid_chars_integral(caplog: pytest.LogCaptureFixture
     assert "Encounter unknown character" in caplog.text
 
 
-def test_to_decimal_with_invalid_chars_fractional(caplog: pytest.LogCaptureFixture) -> None:
+def test_to_decimal_with_invalid_chars_fractional(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     """Test to_decimal with invalid characters in fractional part"""
     caplog.set_level(logging.INFO)
     # Test with invalid character in fractional part (line 256)
@@ -60,7 +64,9 @@ def test_to_decimal_with_invalid_chars_fractional(caplog: pytest.LogCaptureFixtu
     assert "Encounter unknown character" in caplog.text
 
 
-def test_to_decimal_with_multiple_invalid_chars(caplog: pytest.LogCaptureFixture) -> None:
+def test_to_decimal_with_multiple_invalid_chars(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     """Test to_decimal with multiple invalid characters"""
     caplog.set_level(logging.INFO)
     # Test with multiple invalid characters
