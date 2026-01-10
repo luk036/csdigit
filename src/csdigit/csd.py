@@ -36,8 +36,8 @@ The code also includes error checking to ensure that only valid CSD symbols are 
 Overall, this code provides a comprehensive set of tools for working with CSD representations, allowing users to easily convert between decimal and CSD formats in various ways.
 """
 
-from math import ceil, fabs, log
 import logging
+from math import ceil, fabs, log
 
 
 def to_csd(decimal_value: float, places: int) -> str:

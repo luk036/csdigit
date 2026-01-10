@@ -21,7 +21,7 @@ std::string to_csd(double decimal_value, int places) {
     double abs_val = std::fabs(decimal_value);
     int rem;
     std::vector<std::string> csd_list;
-    
+
     if (abs_val < 1.0) {
         rem = 0;
         csd_list.push_back("0");
@@ -155,7 +155,7 @@ std::string to_csdnnz(double decimal_value, int nnz) {
     double abs_val = std::fabs(decimal_value);
     int rem;
     std::vector<std::string> csd_list;
-    
+
     if (abs_val < 1.0) {
         rem = 0;
         csd_list.push_back("0");

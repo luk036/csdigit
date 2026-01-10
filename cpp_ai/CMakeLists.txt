@@ -43,7 +43,7 @@ target_link_libraries(csdigit_cli csdigit)
 if(BUILD_TESTS)
     add_executable(csdigit_tests tests/test_csdigit.cpp)
     target_link_libraries(csdigit_tests csdigit doctest)
-    
+
     # Add test cases
     add_test(NAME csdigit_tests COMMAND csdigit_tests)
 endif()
@@ -52,7 +52,7 @@ endif()
 if(BUILD_EXAMPLES)
     add_executable(example_basic examples/basic_usage.cpp)
     target_link_libraries(example_basic csdigit)
-    
+
     add_executable(example_cli examples/cli_usage.cpp)
     target_link_libraries(example_cli csdigit)
 endif()

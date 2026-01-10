@@ -1,7 +1,8 @@
-from hypothesis import given, assume
-from hypothesis.strategies import integers, floats, lists
 import logging
+
 import pytest
+from hypothesis import assume, given
+from hypothesis.strategies import floats, integers, lists
 
 from csdigit.csd import (  # to_decimal_i,
     to_csd,

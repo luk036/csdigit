@@ -318,18 +318,18 @@ pub fn to_csdnnz_i(decimal_value: i32, nnz: i32) -> String {
 pub fn longest_repeated_substring(cs: &str) -> String {
     let n = cs.len();
     let mut lcsre = vec![vec![0; n + 1]; n + 1];
-    
+
     let mut res = String::new();
     let mut res_length = 0;
     let mut index = 0;
-    
+
     let chars: Vec<char> = cs.chars().collect();
-    
+
     for i in 1..=n {
         for j in (i + 1)..=n {
             if chars[i - 1] == chars[j - 1] && lcsre[i - 1][j - 1] < (j - i) {
                 lcsre[i][j] = lcsre[i - 1][j - 1] + 1;
-                
+
                 if lcsre[i][j] > res_length {
                     res_length = lcsre[i][j];
                     index = i.max(index);
@@ -339,11 +339,11 @@ pub fn longest_repeated_substring(cs: &str) -> String {
             }
         }
     }
-    
+
     if res_length > 0 {
         res = cs[index - res_length..index].to_string();
     }
-    
+
     res
 }
 
@@ -366,11 +366,11 @@ pub fn generate_csd_multiplier(csd: &str, n: usize, m: usize) -> String {
     if csd.len() != m + 1 {
         panic!("CSD length {} doesn't match m={} (should be m+1)", csd.len(), m);
     }
-    
+
     if !csd.chars().all(|c| c == '+' || c == '-' || c == '0') {
         panic!("CSD string can only contain '+', '-', or '0'");
     }
-    
+
     let mut terms = Vec::new();
     for (i, c) in csd.chars().enumerate() {
         let power = m - i;
@@ -380,31 +380,31 @@ pub fn generate_csd_multiplier(csd: &str, n: usize, m: usize) -> String {
             _ => {}
         }
     }
-    
+
     let mut verilog_code = format!(
         "\nmodule csd_multiplier (\n    input signed [{}:0] x,      // Input value\n    output signed [{}:0] result // Result of multiplication\n);",
         n - 1,
         n + m - 1
     );
-    
+
     if !terms.is_empty() {
         verilog_code += "\n\n    // Create shifted versions of input";
         let mut powers_needed: Vec<usize> = terms.iter().map(|&(p, _)| p).collect();
         powers_needed.sort_unstable_by(|a, b| b.cmp(a));
         powers_needed.dedup();
-        
+
         for &p in &powers_needed {
             verilog_code += &format!("\n    wire signed [{}:0] x_shift{} = x <<< {};", n + m - 1, p, p);
         }
     }
-    
+
     verilog_code += "\n\n    // CSD implementation";
     if terms.is_empty() {
         verilog_code += "\n    assign result = 0;";
     } else {
         let (first_power, _) = terms[0];
         let mut expr = format!("x_shift{}", first_power);
-        
+
         for &(power, op) in &terms[1..] {
             if op == "add" {
                 expr += &format!(" + x_shift{}", power);
@@ -412,10 +412,10 @@ pub fn generate_csd_multiplier(csd: &str, n: usize, m: usize) -> String {
                 expr += &format!(" - x_shift{}", power);
             }
         }
-        
+
         verilog_code += &format!("\n    assign result = {};", expr);
     }
-    
+
     verilog_code += "\nendmodule\n";
     verilog_code
 }
@@ -423,7 +423,7 @@ pub fn generate_csd_multiplier(csd: &str, n: usize, m: usize) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_to_csd() {
         assert_eq!(to_csd(28.5, 2), "+00-00.+0");
@@ -431,13 +431,13 @@ mod tests {
         assert_eq!(to_csd(0.0, 2), "0.00");
         assert_eq!(to_csd(0.0, 0), "0.");
     }
-    
+
     #[test]
     fn test_to_csd_i() {
         assert_eq!(to_csd_i(28), "+00-00");
         assert_eq!(to_csd_i(0), "0");
     }
-    
+
     #[test]
     fn test_to_decimal() {
         assert_eq!(to_decimal("+00-00.+"), 28.5);
@@ -446,7 +446,7 @@ mod tests {
         assert_eq!(to_decimal("0.0"), 0.0);
         assert_eq!(to_decimal("0.+"), 0.5);
     }
-    
+
     #[test]
     fn test_to_csdnnz() {
         assert_eq!(to_csdnnz(28.5, 4), "+00-00.+");
@@ -454,7 +454,7 @@ mod tests {
         assert_eq!(to_csdnnz(0.0, 4), "0");
         assert_eq!(to_csdnnz(0.5, 4), "0.+");
     }
-    
+
     #[test]
     fn test_to_csdnnz_i() {
         assert_eq!(to_csdnnz_i(28, 4), "+00-00");
@@ -462,12 +462,12 @@ mod tests {
         assert_eq!(to_csdnnz_i(37, 2), "+00+00");
         assert_eq!(to_csdnnz_i(158, 2), "+0+00000");
     }
-    
+
     #[test]
     fn test_longest_repeated_substring() {
         assert_eq!(longest_repeated_substring("+-00+-00+-00+-0"), "+-00+-0");
     }
-    
+
     #[test]
     fn test_generate_csd_multiplier() {
         let verilog = generate_csd_multiplier("+00-00+0", 8, 7);

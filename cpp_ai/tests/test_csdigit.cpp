@@ -14,7 +14,7 @@ TEST_CASE("to_csd function") {
         CHECK(csdigit::to_csd(0.0, 2) == "0.00");
         CHECK(csdigit::to_csd(0.0, 0) == "0.");
     }
-    
+
     SUBCASE("Round trip") {
         double value = 28.5;
         std::string csd = csdigit::to_csd(value, 4);
@@ -66,11 +66,11 @@ TEST_CASE("generate_csd_multiplier function") {
         CHECK(verilog.find("input signed [7:0] x") != std::string::npos);
         CHECK(verilog.find("output signed [14:0] result") != std::string::npos);
     }
-    
+
     SUBCASE("Invalid CSD length") {
         CHECK_THROWS_AS(csdigit::generate_csd_multiplier("+00-00", 8, 7), std::invalid_argument);
     }
-    
+
     SUBCASE("Invalid characters") {
         CHECK_THROWS_AS(csdigit::generate_csd_multiplier("+00-00a", 8, 6), std::invalid_argument);
     }
@@ -81,12 +81,12 @@ TEST_CASE("Edge cases") {
         CHECK(csdigit::to_csd(1e-10, 4) == "0.0000");
         CHECK(csdigit::to_csdnnz(1e-10, 2) == "0");
     }
-    
+
     SUBCASE("Large values") {
         CHECK(csdigit::to_csd_i(1000).length() > 0);
         CHECK(csdigit::to_csdnnz_i(1000, 5).length() > 0);
     }
-    
+
     SUBCASE("Negative values") {
         CHECK(csdigit::to_csd(-28.5, 2) == "-00+00.-0");
         CHECK(csdigit::to_csd_i(-28) == "-00+00");

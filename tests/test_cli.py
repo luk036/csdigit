@@ -1,6 +1,8 @@
-import pytest
-from csdigit.cli import main, run
 from unittest.mock import patch
+
+import pytest
+
+from csdigit.cli import main, run
 
 __author__ = "Wai-Shing Luk"
 __copyright__ = "Wai-Shing Luk"

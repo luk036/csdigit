@@ -45,15 +45,15 @@ int main() {
     // Convert decimal to CSD
     std::string csd = csdigit::to_csd(28.5, 2);
     std::cout << csd << std::endl;  // Output: "+00-00.+0"
-    
+
     // Convert CSD to decimal
     double decimal = csdigit::to_decimal("+00-00.+");
     std::cout << decimal << std::endl;  // Output: 28.5
-    
+
     // Convert integer to CSD
     std::string csd_int = csdigit::to_csd_i(28);
     std::cout << csd_int << std::endl;  // Output: "+00-00"
-    
+
     return 0;
 }
 ```

@@ -9,7 +9,7 @@ use log;
 struct Cli {
     #[command(subcommand)]
     command: Commands,
-    
+
     #[arg(short, long, action = clap::ArgAction::Count)]
     verbose: u8,
 }
@@ -20,7 +20,7 @@ enum Commands {
     ToCsd {
         /// Decimal number to convert
         decimal: f64,
-        
+
         /// Number of decimal places
         #[arg(short, long, default_value = "4")]
         places: i32,
@@ -29,7 +29,7 @@ enum Commands {
     ToCsdnnz {
         /// Decimal number to convert
         decimal: f64,
-        
+
         /// Maximum number of non-zero digits
         #[arg(short, long, default_value = "4")]
         nnz: i32,
@@ -48,7 +48,7 @@ fn setup_logging(verbose: u8) {
         2 => log::LevelFilter::Debug,
         _ => log::LevelFilter::Trace,
     };
-    
+
     env_logger::Builder::new()
         .filter_level(log_level)
         .format_timestamp(None)
@@ -58,10 +58,10 @@ fn setup_logging(verbose: u8) {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
-    
+
     setup_logging(cli.verbose);
     log::debug!("Starting CSD calculations...");
-    
+
     match cli.command {
         Commands::ToCsd { decimal, places } => {
             let ans = to_csd(decimal, places);
@@ -76,7 +76,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("{}", ans);
         }
     }
-    
+
     log::info!("Script ends here");
     Ok(())
 }
