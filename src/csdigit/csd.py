@@ -318,17 +318,31 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
             csd_list.append(".")
         power_of_two /= 2
         remainder -= 1
-        determinant = 1.5 * decimal_value
-        if nnz > 0 and determinant > power_of_two:
-            csd_list.append("+")
-            decimal_value -= power_of_two
-            nnz -= 1
-        elif nnz > 0 and determinant < -power_of_two:
-            csd_list.append("-")
-            decimal_value += power_of_two
-            nnz -= 1
+        if nnz > 0:
+            determinant = 1.5 * decimal_value
+            if determinant > power_of_two:
+                csd_list.append("+")
+                decimal_value -= power_of_two
+                nnz -= 1
+            elif determinant < -power_of_two:
+                csd_list.append("-")
+                decimal_value += power_of_two
+                nnz -= 1
+            else:
+                csd_list.append("0")
         else:
             csd_list.append("0")
+
+        # if nnz > 0 and determinant > power_of_two:
+        #     csd_list.append("+")
+        #     decimal_value -= power_of_two
+        #     nnz -= 1
+        # elif nnz > 0 and determinant < -power_of_two:
+        #     csd_list.append("-")
+        #     decimal_value += power_of_two
+        #     nnz -= 1
+        # else:
+        #     csd_list.append("0")
 
     return "".join(csd_list)
 
