@@ -145,9 +145,9 @@ def setup_logging(loglevel: int) -> None:
 
 
 def main(args: List[str]) -> None:
-    """Wrapper allowing :func:`fib` to be called with string arguments in a CLI fashion
+    """Wrapper allowing :func:`main` to be called with string arguments in a CLI fashion
 
-    Instead of returning the value from :func:`fib`, it prints the result to the
+    Instead of returning the value from :func:`main`, it prints the result to the
     ``stdout`` in a nicely formatted message.
 
     Args:
