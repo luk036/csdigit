@@ -19,7 +19,29 @@ from math import ceil, fabs, log, pow
 
 
 def to_csd(number, places=0, debug=False):
-    """Convert the argument to CSD Format."""
+    """Convert a decimal number to Canonical Signed Digit (CSD) format.
+
+    The CSD representation uses only three symbols: '+' (represents +1),
+    '-' (represents -1), and '0' (represents 0). No two adjacent digits
+    can both be non-zero, ensuring a unique representation.
+
+    :param number: The decimal number to convert to CSD format
+    :type number: float
+    :param places: Number of fractional decimal places to represent (default: 0)
+    :type places: int
+    :param debug: If True, print debug information during conversion (default: False)
+    :type debug: bool
+    :return: The CSD string representation of the input number
+    :rtype: str
+
+    Examples:
+        >>> to_csd(28.5, 2)
+        '+00-00.+'
+        >>> to_csd(0.0)
+        '0'
+        >>> to_csd(-0.5, 1)
+        '0.-'
+    """
 
     if debug:
         print("Converting %f " % (number), end="")
@@ -78,7 +100,26 @@ def to_csd(number, places=0, debug=False):
 
 
 def to_decimal(csd_str, debug=False):
-    """Convert the CSD string to a decimal"""
+    """Convert a Canonical Signed Digit (CSD) string to a decimal number.
+
+    Parses the CSD string and computes its decimal value by evaluating
+    each digit according to its position and power of 2.
+
+    :param csd_str: The CSD string to convert to decimal
+    :type csd_str: str
+    :param debug: If True, print debug information during conversion (default: False)
+    :type debug: bool
+    :return: The decimal (float) value represented by the CSD string
+    :rtype: float
+
+    Examples:
+        >>> to_decimal("+00-00.+")
+        28.5
+        >>> to_decimal("0.-")
+        -0.5
+        >>> to_decimal("0")
+        0.0
+    """
 
     if debug:
         print("Converting: ", csd_str)

@@ -84,14 +84,14 @@ def test_to_csd() -> None:
     assert to_csd(-28.5, 2) == "-00+00.-0"
 
 
-def test_to_csdnn() -> None:
+def test_to_csdnnz() -> None:
     assert to_csdnnz(28.5, 4) == "+00-00.+"
     assert to_csdnnz(-0.5, 4) == "0.-"
     assert to_csdnnz(0.0, 4) == "0"
     assert to_csdnnz(28.5, 2) == "+00-00"
 
 
-def test_to_csdnn_i() -> None:
+def test_to_csdnnz_i() -> None:
     assert to_csdnnz_i(28, 4) == "+00-00"
     assert to_csdnnz_i(-0, 4) == "0"
     assert to_csdnnz_i(0, 4) == "0"
