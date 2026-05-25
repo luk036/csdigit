@@ -37,7 +37,7 @@ Overall, this code provides a comprehensive set of tools for working with CSD re
 """
 
 import logging
-from math import ceil, fabs, log
+from math import fabs, frexp, ldexp
 
 
 def to_csd(decimal_value: float, places: int) -> str:
@@ -76,10 +76,11 @@ def to_csd(decimal_value: float, places: int) -> str:
         remainder = 0
         csd_list = ["0"]
     else:
-        remainder = int(ceil(log(abs_val * 1.5, 2)))
+        mant, exp = frexp(abs_val * 1.5)
+        remainder = exp - 1 if mant == 0.5 else exp
         csd_list = []
 
-    power_of_two = pow(2.0, remainder)
+    power_of_two = ldexp(1.0, remainder)
 
     for _ in range(remainder):
         power_of_two /= 2.0
@@ -245,13 +246,13 @@ def to_decimal(csd: str) -> float:
         return integral
 
     integral_part, fractional_part = csd.split(".", 1)
-    integral_float: float = 0.0
+    integral: int = 0
     for digit in integral_part:
-        integral_float *= 2.0
+        integral *= 2
         if digit == "+":
-            integral_float += 1.0
+            integral += 1
         elif digit == "-":
-            integral_float -= 1.0
+            integral -= 1
         elif digit != "0":
             logging.info(f"Encounter unknown character {digit}")
             # raise ValueError(ERROR1)
@@ -268,7 +269,7 @@ def to_decimal(csd: str) -> float:
             # raise ValueError(ERROR1)
         scale /= 2.0
 
-    return integral_float + fractional
+    return float(integral) + fractional
 
 
 def to_csdnnz(decimal_value: float, nnz: int) -> str:
@@ -308,10 +309,11 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
         remainder = 0
         csd_list = ["0"]
     else:
-        remainder = ceil(log(abs_val * 1.5, 2))
+        mant, exp = frexp(abs_val * 1.5)
+        remainder = exp - 1 if mant == 0.5 else exp
         csd_list = []
 
-    power_of_two = pow(2, remainder)
+    power_of_two = ldexp(1.0, remainder)
 
     while remainder > 0 or (nnz > 0 and fabs(decimal_value) > 1e-100):
         if remainder == 0:
@@ -381,8 +383,8 @@ def to_csdnnz_i(decimal_value: int, nnz: int) -> str:
     if decimal_value == 0:
         return "0"
 
-    remainder = ceil(log(abs(decimal_value) * 1.5, 2))
-    power_of_two = pow(2, remainder)
+    remainder = (abs(decimal_value) * 3 // 2).bit_length()
+    power_of_two = 1 << remainder
     csd_list = []
     while power_of_two > 1:
         power_of_two_half = power_of_two >> 1

@@ -14,8 +14,10 @@ repos:
       - id: debug-statements
       - id: end-of-file-fixer
       - id: requirements-txt-fixer
+        exclude: "requirements[.]txt$"
       - id: mixed-line-ending
         args: ["--fix=auto"] # replace 'auto' with 'lf' to enforce Linux/Mac line endings or 'crlf' for Windows
+        exclude: "requirements[.]txt$"
 
   ## If you want to automatically "modernize" your Python code:
   # - repo: https://github.com/asottile/pyupgrade

@@ -54,7 +54,8 @@ def longest_repeated_substring(csd_string: str) -> str:
         '+-00+-0'
     """
     num_dimensions = len(csd_string) + 1
-    LCSRe = [[0 for _ in range(num_dimensions)] for _ in range(num_dimensions)]
+    # Flat 2-row DP table: avoids O(n²) memory and double-list indirection
+    LCSRe = [0] * (2 * num_dimensions)
 
     result = ""  # To store result
     result_length = 0  # To store length of result
@@ -62,23 +63,25 @@ def longest_repeated_substring(csd_string: str) -> str:
     # building table in bottom-up manner
     index = 0
     for row_index in range(1, num_dimensions):
+        cur_row = (row_index % 2) * num_dimensions
+        prev_row = ((row_index - 1) % 2) * num_dimensions
         for col_index in range(row_index + 1, num_dimensions):
             # (col_index-row_index) > LCSRe[row_index-1][col_index-1] to remove
             # overlapping
             if csd_string[row_index - 1] == csd_string[col_index - 1] and LCSRe[
-                row_index - 1
-            ][col_index - 1] < (col_index - row_index):
-                LCSRe[row_index][col_index] = LCSRe[row_index - 1][col_index - 1] + 1
+                prev_row + col_index - 1
+            ] < (col_index - row_index):
+                LCSRe[cur_row + col_index] = LCSRe[prev_row + col_index - 1] + 1
 
                 # updating maximum length of the
                 # substring and updating the finishing
                 # index of the suffix
-                if LCSRe[row_index][col_index] > result_length:
-                    result_length = LCSRe[row_index][col_index]
+                if LCSRe[cur_row + col_index] > result_length:
+                    result_length = LCSRe[cur_row + col_index]
                     index = max(row_index, index)
 
             else:
-                LCSRe[row_index][col_index] = 0
+                LCSRe[cur_row + col_index] = 0
 
     # If we have non-empty result, then insert
     # all characters from first character to

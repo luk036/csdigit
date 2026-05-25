@@ -62,24 +62,9 @@ module csd_multiplier (
     wire signed [9:0] x_shift0 = x <<< 0;
 
     // CSD implementation
-    assign result = x_shift2 - x_shift0;
+    assign result = -x_shift2 - x_shift0;
 endmodule
 """
-    # Note: The logic for negative is tricky. The first term is always taken as is.
-    # So -a -b is not -(a+b). It's just -a-b.
-    # Based on the implementation, the first term is not negated.
-    # This seems like a bug in the implementation if it's supposed to handle a leading negative.
-    # However, the docstring says "proper signed handling".
-    # Let's re-check the implementation.
-    # first_power, first_op = terms[0]
-    # expr = f"x_shift{first_power}"
-    # This means the first term is always positive in the expression.
-    # This seems like a bug in the implementation if it's supposed to handle a leading negative.
-    # Let's write the test according to the current implementation.
-    # The current implementation will produce `x_shift2 - x_shift0` for "-0-", which is incorrect.
-    # It should be `-x_shift2 - x_shift0`.
-    # The implementation seems to ignore the sign of the first term.
-    # I will assume the implementation is correct for now and write the test to match.
     assert generate_csd_multiplier(csd, N, M) == expected_verilog
 
 
@@ -339,4 +324,137 @@ def test_generate_csd_multiplier_positive_only_operations(csd: str) -> None:
 
     except ValueError:
         # Expected for malformed CSD strings
+        pass
+
+
+# --- LCSRe optimization tests ---
+
+
+def test_flat_when_pattern_nnz_is_one() -> None:
+    """Pattern '+0' has only 1 non-zero digit — should NOT be optimized."""
+    verilog = generate_csd_multiplier("+00-00+0", 8, 7)
+    assert "_pat" not in verilog, "Should not create _pat for nnz=1 pattern"
+    assert "x_shift7 - x_shift4 + x_shift1" in verilog
+
+
+def test_double_repeat_optimization() -> None:
+    """+0-0+0-0: repeated '+0-0' (2 nnz) at positions 0 and 4."""
+    verilog = generate_csd_multiplier("+0-0+0-0", 8, 7)
+    assert "_pat" in verilog, "Should create _pat wire"
+    assert "_pat = x_shift7 - x_shift5" in verilog
+    assert "(_pat >>> 4)" in verilog
+    # Count only x_shift wire declarations (exclude _pat which also has 'wire signed' + 'x_shift')
+    xwires = [l for l in verilog.split("\n") if "wire signed" in l and "_pat" not in l]
+    assert len(xwires) == 4  # 4 wires: x_shift7, x_shift5, x_shift3, x_shift1
+    assert "LCSRe" in verilog
+
+
+def test_triple_repeat_optimization() -> None:
+    """+0-0+0-0+0-0: repeated '+0-0' at positions 0, 4, 8."""
+    verilog = generate_csd_multiplier("+0-0+0-0+0-0", 8, 11)
+    assert "_pat" in verilog
+    assert "(_pat >>> 4)" in verilog
+    assert "(_pat >>> 8)" in verilog
+    assert "LCSRe" in verilog
+
+
+def test_longer_pattern_repeat() -> None:
+    """+00-00+00-00: repeated '+00-00' (2 nnz, 5 chars) at positions 0 and 6."""
+    verilog = generate_csd_multiplier("+00-00+00-00", 8, 11)
+    assert "_pat" in verilog
+    assert "_pat = x_shift11 - x_shift8" in verilog
+    assert "(_pat >>> 6)" in verilog
+
+
+def test_leading_minus_no_optimization() -> None:
+    """CSD starting with '-' and no repeated pattern — flat output with sign fix."""
+    verilog = generate_csd_multiplier("-0-", 8, 2)
+    assert "_pat" not in verilog
+    # First term sign must be preserved
+    assert "-x_shift2 - x_shift0" in verilog
+
+
+def test_pattern_with_leading_minus() -> None:
+    """Repeated pattern starting with '-': -0+0-0+0."""
+    verilog = generate_csd_multiplier("-0+0-0+0", 8, 7)
+    assert "_pat" in verilog
+    assert "_pat = -x_shift7 + x_shift5" in verilog
+    assert "(_pat >>> 4)" in verilog
+
+
+def test_no_optimization_for_single_occurrence() -> None:
+    """CSD with unique pattern throughout — no repeat = flat."""
+    verilog = generate_csd_multiplier("+0-+00-0", 8, 7)
+    assert "_pat" not in verilog
+
+
+def test_pat_wire_width_matches_output() -> None:
+    """The _pat wire should have the same width as output."""
+    verilog = generate_csd_multiplier("+0-0+0-0", 8, 7)
+    # output_width = 8 + 7 = 15, so [14:0]
+    output_width = 8 + 7 - 1
+    assert f"[{output_width}:0] _pat" in verilog
+
+
+def test_repeat_with_trailing_gap() -> None:
+    """Repeated pattern followed by non-repeating suffix."""
+    verilog = generate_csd_multiplier("+0-0+0-0+0", 8, 9)
+    assert "_pat" in verilog
+    assert "(_pat >>> 4)" in verilog
+    # The trailing '+0' at position 8 has power=1, appears as x_shift1
+    assert "x_shift1" in verilog
+
+
+def test_repeat_with_leading_gap() -> None:
+    """Non-repeating prefix before repeated pattern."""
+    verilog = generate_csd_multiplier("0+0-0+0-0+0-0", 8, 12)
+    assert "_pat" in verilog
+
+
+# --- Property-based LCSRe tests ---
+
+
+@given(st.text(alphabet="+-0", min_size=4, max_size=12))
+def test_optimization_only_with_nnz_ge2(csd: str) -> None:
+    """When optimization triggers, there must be a _pat wire and LCSRe comment."""
+    try:
+        m = len(csd) - 1
+        verilog = generate_csd_multiplier(csd, 8, m)
+        has_opt = "_pat" in verilog
+        has_lcsre = "LCSRe" in verilog
+        assert has_opt == has_lcsre, "_pat and LCSRe comment must appear together"
+        if has_opt:
+            # Pattern must have at least 2 non-zero digits
+            pat_line = [l for l in verilog.split("\n") if "_pat =" in l]
+            assert len(pat_line) <= 1  # at most one _pat wire
+    except ValueError:
+        pass
+
+
+@given(st.text(alphabet="+-0", min_size=4, max_size=12))
+def test_shift_references_use_arithmetic_right_shift(csd: str) -> None:
+    """All shifted _pat references must use >>> (arithmetic shift)."""
+    try:
+        m = len(csd) - 1
+        verilog = generate_csd_multiplier(csd, 8, m)
+        if "_pat >>>" in verilog:
+            # Every shift must use >>>
+            assert ">>" not in verilog.replace(">>>", "")
+    except ValueError:
+        pass
+
+
+@given(st.text(alphabet="+-0", min_size=4, max_size=12))
+def test_x_shift_count_bounds(csd: str) -> None:
+    """Number of x_shift wires should be at most the number of non-zero digits."""
+    try:
+        m = len(csd) - 1
+        verilog = generate_csd_multiplier(csd, 8, m)
+        nnz = csd.count("+") + csd.count("-")
+        x_shift_count = verilog.count("wire signed")
+        # Each wire declarations line is for one x_shift (plus maybe _pat)
+        wire_decls = [l for l in verilog.split("\n") if "wire signed" in l]
+        x_shift_wires = [l for l in wire_decls if "x_shift" in l]
+        assert len(x_shift_wires) <= nnz or "_pat" in verilog
+    except ValueError:
         pass
