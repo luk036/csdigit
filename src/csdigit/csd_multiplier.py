@@ -8,6 +8,8 @@ Common Substring with Repeated Elements) is used to share hardware via a
 sub-expression wire.
 """
 
+from typing import Optional
+
 from csdigit.lcsre import longest_repeated_substring
 
 
@@ -207,7 +209,7 @@ def _find_cross_patterns(
 def _build_coeff_expr(
     csd: str,
     max_power: int,
-    pattern: str | None,
+    pattern: Optional[str],
     base_pos: int,
     cse_name: str,
 ) -> str:
@@ -308,7 +310,7 @@ def generate_csd_multipliers(
     csd_strings = [csd for _, csd, _, _ in coeffs]
     cross = _find_cross_patterns(csd_strings)
 
-    best_pattern: str | None = None
+    best_pattern: Optional[str] = None
     best_occurrences: list[tuple[int, int]] = []
     if cross:
 
