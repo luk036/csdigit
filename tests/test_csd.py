@@ -242,6 +242,16 @@ def test_csd_addition_property(numbers: list[int]) -> None:
     assert csd_sum == original_sum
 
 
+def test_to_decimal_no_dot_with_invalid_chars(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test to_decimal with invalid chars when no decimal point (covers line 244)."""
+    caplog.set_level(logging.INFO)
+    result = to_decimal("+X0-")
+    assert result == 7
+    assert "Encounter unknown character" in caplog.text
+
+
 @given(integers(min_value=-100, max_value=100), integers(min_value=1, max_value=10))
 def test_csd_power_of_two_property(number: int, power: int) -> None:
     """Test CSD representation of powers of two."""

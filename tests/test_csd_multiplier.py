@@ -2,7 +2,12 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from csdigit.csd_multiplier import generate_csd_multiplier
+from csdigit.csd_multiplier import (
+    _build_coeff_expr,
+    _find_cross_patterns,
+    generate_csd_multiplier,
+    generate_csd_multipliers,
+)
 
 
 def test_generate_csd_multiplier_valid() -> None:
@@ -344,7 +349,7 @@ def test_double_repeat_optimization() -> None:
     assert "_pat = x_shift7 - x_shift5" in verilog
     assert "(_pat >>> 4)" in verilog
     # Count only x_shift wire declarations (exclude _pat which also has 'wire signed' + 'x_shift')
-    xwires = [l for l in verilog.split("\n") if "wire signed" in l and "_pat" not in l]
+    xwires = [line for line in verilog.split("\n") if "wire signed" in line and "_pat" not in line]
     assert len(xwires) == 4  # 4 wires: x_shift7, x_shift5, x_shift3, x_shift1
     assert "LCSRe" in verilog
 
@@ -425,7 +430,7 @@ def test_optimization_only_with_nnz_ge2(csd: str) -> None:
         assert has_opt == has_lcsre, "_pat and LCSRe comment must appear together"
         if has_opt:
             # Pattern must have at least 2 non-zero digits
-            pat_line = [l for l in verilog.split("\n") if "_pat =" in l]
+            pat_line = [line for line in verilog.split("\n") if "_pat =" in line]
             assert len(pat_line) <= 1  # at most one _pat wire
     except ValueError:
         pass
@@ -451,10 +456,237 @@ def test_x_shift_count_bounds(csd: str) -> None:
         m = len(csd) - 1
         verilog = generate_csd_multiplier(csd, 8, m)
         nnz = csd.count("+") + csd.count("-")
-        x_shift_count = verilog.count("wire signed")
         # Each wire declarations line is for one x_shift (plus maybe _pat)
-        wire_decls = [l for l in verilog.split("\n") if "wire signed" in l]
-        x_shift_wires = [l for l in wire_decls if "x_shift" in l]
+        wire_decls = [line for line in verilog.split("\n") if "wire signed" in line]
+        x_shift_wires = [line for line in wire_decls if "x_shift" in line]
         assert len(x_shift_wires) <= nnz or "_pat" in verilog
     except ValueError:
         pass
+
+
+# =====================================================================
+# Cross-CSE tests: _find_cross_patterns, _build_coeff_expr,
+# generate_csd_multipliers
+# =====================================================================
+
+
+def test_find_cross_patterns_basic() -> None:
+    """Find shared pattern across multiple CSD strings."""
+    result = _find_cross_patterns(["+0-0", "+0-0+0-0"])
+    assert "+0-0" in result
+    occ = result["+0-0"]
+    idxs = {ci for ci, _ in occ}
+    assert len(idxs) >= 2
+
+
+def test_find_cross_patterns_no_match() -> None:
+    """No shared pattern -> empty dict."""
+    result = _find_cross_patterns(["+-0", "0-+0"])
+    assert result == {}
+
+
+def test_find_cross_patterns_min_nnz_filters() -> None:
+    """min_nnz parameter correctly filters low-NNZ patterns."""
+    result = _find_cross_patterns(["+00-", "+00-"], min_nnz=3)
+    assert result == {}
+    result = _find_cross_patterns(["+00-", "+00-"], min_nnz=2)
+    assert "+00-" in result
+
+
+def test_find_cross_patterns_empty_list() -> None:
+    """Empty CSD list -> empty dict."""
+    assert _find_cross_patterns([]) == {}
+
+
+def test_find_cross_patterns_same_csd_ignored() -> None:
+    """Pattern must cross >=2 *different* CSD strings."""
+    result = _find_cross_patterns(["+0-0"], min_nnz=2)
+    assert result == {}
+
+
+def test_build_coeff_expr_no_pattern() -> None:
+    """Flat expression without shared CSE."""
+    expr = _build_coeff_expr("+0-", 2, None, 0, "")
+    assert "x_shift2 - x_shift0" in expr
+
+
+def test_build_coeff_expr_all_zero_no_pattern() -> None:
+    """All-zero CSD with no pattern -> empty string."""
+    expr = _build_coeff_expr("000", 2, None, 0, "")
+    assert expr == ""
+
+
+def test_build_coeff_expr_with_pattern() -> None:
+    """Expression using shared CSE wire with shifts."""
+    expr = _build_coeff_expr("+0-0+0-0", 7, "+0-0", 0, "_cse_0")
+    assert "_cse_0" in expr
+    assert "(_cse_0 >>> 4)" in expr
+
+
+def test_build_coeff_expr_with_leading_gap() -> None:
+    """Gap before first pattern occurrence."""
+    expr = _build_coeff_expr("0+0-0+0", 7, "+0-0", 1, "_cse_0")
+    assert "_cse_0" in expr
+    assert "x_shift7" in expr or "x_shift" in expr
+
+
+def test_build_coeff_expr_with_trailing_gap() -> None:
+    """Suffix after last pattern occurrence."""
+    expr = _build_coeff_expr("+0-0+0-0+0", 9, "+0-0", 0, "_cse_0")
+    assert "_cse_0" in expr
+    assert "x_shift1" in expr
+
+
+def test_build_coeff_expr_gap_with_nonzero_content() -> None:
+    """Gap containing non-zero digits before pattern (covers line 232)."""
+    expr = _build_coeff_expr("+0+0-0+0", 7, "+0-0", 2, "_cse_0")
+    assert "x_shift7" in expr
+    assert "_cse_0" in expr
+
+
+def test_build_coeff_expr_pattern_not_found_all_zero() -> None:
+    """Pattern given but not found in CSD, all-zero content -> empty (covers line 247)."""
+    expr = _build_coeff_expr("00000", 4, "+0-0", 0, "_cse_0")
+    assert expr == ""
+
+
+# --- generate_csd_multipliers (cross-CSE public API) ---
+
+
+def test_generate_csd_multipliers_empty_raises() -> None:
+    """Empty coefficient list raises ValueError."""
+    with pytest.raises(ValueError, match="At least one coefficient is required"):
+        generate_csd_multipliers([], module_name="test")
+
+
+def test_generate_csd_multipliers_single_coeff() -> None:
+    """Single coefficient — no cross-CSE wire."""
+    verilog = generate_csd_multipliers(
+        [("h0", "+0-", 8, 2)],
+        module_name="single_tap",
+    )
+    assert "module single_tap" in verilog
+    assert "endmodule" in verilog
+    assert "input signed [7:0] x" in verilog
+    assert "output signed [9:0] h0" in verilog
+    assert "_cse_0" not in verilog
+    assert "x_shift2" in verilog
+    assert "x_shift0" in verilog
+
+
+def test_generate_csd_multipliers_mismatched_widths() -> None:
+    """Mismatched input_width/max_power raises ValueError."""
+    coeffs = [
+        ("h0", "+0-0", 8, 3),
+        ("h1", "+0-0+0-0", 16, 5),
+    ]
+    with pytest.raises(
+        ValueError,
+        match="All coefficients must share the same input_width and max_power",
+    ):
+        generate_csd_multipliers(coeffs)
+
+
+def test_generate_csd_multipliers_invalid_chars() -> None:
+    """Invalid CSD characters raise ValueError."""
+    with pytest.raises(ValueError, match="CSD string.*can only contain"):
+        generate_csd_multipliers([("h0", "12+", 8, 2)])
+
+
+def test_generate_csd_multipliers_length_mismatch() -> None:
+    """CSD length mismatched with max_power raises ValueError."""
+    with pytest.raises(ValueError, match="doesn't match max_power"):
+        generate_csd_multipliers([("h0", "+0-0", 8, 5)])
+
+
+def test_generate_csd_multipliers_all_zero_coeffs() -> None:
+    """All-zero CSD coefficients produce zero assignments."""
+    verilog = generate_csd_multipliers(
+        [("h0", "000", 8, 2)],
+        module_name="zero_filter",
+    )
+    assert "x_shift" not in verilog
+    assert "= 0;" in verilog
+
+
+def test_generate_csd_multipliers_with_shared_pattern() -> None:
+    """Cross-CSE triggers when a pattern repeats across coefficients."""
+    verilog = generate_csd_multipliers(
+        [
+            ("h0", "0000+0-0", 8, 7),  # padded to max_power=7, len=8
+            ("h1", "+0-0+0-0", 8, 7),
+        ],
+        module_name="fir_shared",
+    )
+    assert "_cse_0" in verilog
+    assert "Cross-CSE" in verilog
+
+
+def test_generate_csd_multipliers_no_shared_pattern() -> None:
+    """No cross-CSE when coefficients share no common substring."""
+    verilog = generate_csd_multipliers(
+        [
+            ("h0", "+0-0", 8, 3),
+            ("h1", "0-+0", 8, 3),
+        ],
+        module_name="fir_no_share",
+    )
+    assert "_cse_0" not in verilog
+
+
+def test_generate_csd_multipliers_single_nnz_no_cse() -> None:
+    """Single non-zero digit patterns should not trigger cross-CSE (NNZ<2)."""
+    verilog = generate_csd_multipliers(
+        [
+            ("h0", "+00", 8, 2),
+            ("h1", "0+0", 8, 2),
+        ],
+        module_name="single_nnz",
+    )
+    assert "_cse_0" not in verilog
+
+
+def test_generate_csd_multipliers_custom_module_name() -> None:
+    """Custom module name is reflected in output."""
+    verilog = generate_csd_multipliers(
+        [("coeff", "+0-", 8, 2)],
+        module_name="my_custom_filter",
+    )
+    assert "module my_custom_filter" in verilog
+
+
+def test_generate_csd_multipliers_mixed_pattern_and_flat() -> None:
+    """Some coeffs use pattern, others fall back to flat expression."""
+    # h0 and h1 share "+0-0" pattern; h2 has a different string
+    verilog = generate_csd_multipliers(
+        [
+            ("h0", "+0-0+0-0", 8, 7),
+            ("h1", "0000+0-0", 8, 7),  # padded to max_power=7
+            ("h2", "0+00-0+0", 8, 7),
+        ],
+        module_name="mixed",
+    )
+    assert "module mixed" in verilog
+
+
+def test_generate_csd_multipliers_three_coeffs_all_zeros() -> None:
+    """Multiple all-zero coefficients."""
+    verilog = generate_csd_multipliers(
+        [
+            ("a", "00", 4, 1),
+            ("b", "00", 4, 1),
+        ],
+        module_name="zeros",
+    )
+    assert "x_shift" not in verilog
+    assert "= 0;" in verilog
+
+
+def test_generate_csd_multipliers_with_csd_leading_minus() -> None:
+    """Coefficient starting with minus in cross-CSE."""
+    verilog = generate_csd_multipliers(
+        [("h0", "-0+", 8, 2)],
+        module_name="leading_minus",
+    )
+    assert "module leading_minus" in verilog
+    assert "-x_shift2 + x_shift0" in verilog
