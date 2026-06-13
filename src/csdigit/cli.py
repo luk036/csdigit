@@ -1,20 +1,19 @@
 """
-This is a to_csd file that can serve as a starting point for a Python
-console script. To run this script uncomment the following lines in the
-``[options.entry_points]`` section in ``setup.cfg``::
+Command-line interface for CSD conversion.
 
-    console_scripts =
-         to_csd = csdigit.to_csd:run
+Provides a CLI wrapper around the csdigit library, allowing conversion
+between decimal numbers and Canonical Signed Digit (CSD) representation
+from the terminal.
 
-Then run ``pip install .`` (or ``pip install -e .`` for editable mode)
-which will install the command ``to_csd`` inside your current environment.
+Supported conversions:
+    - Decimal float to CSD (--to_csd / -c)
+    - Decimal float to CSD with limited non-zero digits (--to_csdnnz / -f)
+    - CSD string to decimal (--to_decimal / -d)
 
-Besides console scripts, the header (i.e. until ``_logger``...) of this file can
-also be used as template for Python modules.
-
-References:
-    - https://setuptools.readthedocs.io/en/latest/userguide/entry_point.html
-    - https://pip.pypa.io/en/stable/reference/pip_install
+Usage:
+    python -m csdigit.cli --to_csd 28.5
+    python -m csdigit.cli --to_decimal "+00-00.+"
+    python -m csdigit.cli --to_csdnnz 28.5 --nnz 4
 """
 
 import argparse
