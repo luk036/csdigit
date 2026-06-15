@@ -349,7 +349,11 @@ def test_double_repeat_optimization() -> None:
     assert "_pat = x_shift7 - x_shift5" in verilog
     assert "(_pat >>> 4)" in verilog
     # Count only x_shift wire declarations (exclude _pat which also has 'wire signed' + 'x_shift')
-    xwires = [line for line in verilog.split("\n") if "wire signed" in line and "_pat" not in line]
+    xwires = [
+        line
+        for line in verilog.split("\n")
+        if "wire signed" in line and "_pat" not in line
+    ]
     assert len(xwires) == 4  # 4 wires: x_shift7, x_shift5, x_shift3, x_shift1
     assert "LCSRe" in verilog
 
