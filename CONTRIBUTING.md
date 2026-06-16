@@ -69,27 +69,29 @@ by adding missing information and correcting mistakes.
 This means that the docs are kept in the same repository as the project code, and
 that any documentation update is done in the same way was a code contribution.
 
-```{todo} Don't forget to mention which markup language you are using.
+```{todo}
+Don't forget to mention which markup language you are using.
 
-    e.g.,  [reStructuredText] or [CommonMark] with [MyST] extensions.
+e.g.,  [reStructuredText] or [CommonMark] with [MyST] extensions.
 ```
 
-```{todo} If your project is hosted on GitHub, you can also mention the following tip:
+```{todo}
+If your project is hosted on GitHub, you can also mention the following tip:
 
-   :::{tip}
-      Please notice that the [GitHub web interface] provides a quick way of
-      propose changes in `csdigit`'s files. While this mechanism can
-      be tricky for normal code contributions, it works perfectly fine for
-      contributing to the docs, and can be quite handy.
+:::{tip}
+   Please notice that the [GitHub web interface] provides a quick way of
+   propose changes in `csdigit`'s files. While this mechanism can
+   be tricky for normal code contributions, it works perfectly fine for
+   contributing to the docs, and can be quite handy.
 
-      If you are interested in trying this method out, please navigate to
-      the `docs` folder in the source [repository], find which file you
-      would like to propose changes and click in the little pencil icon at the
-      top, to open [GitHub's code editor]. Once you finish editing the file,
-      please write a message in the form at the bottom of the page describing
-      which changes have you made and what are the motivations behind them and
-      submit your proposal.
-   :::
+   If you are interested in trying this method out, please navigate to
+   the `docs` folder in the source [repository], find which file you
+   would like to propose changes and click in the little pencil icon at the
+   top, to open [GitHub's code editor]. Once you finish editing the file,
+   please write a message in the form at the bottom of the page describing
+   which changes have you made and what are the motivations behind them and
+   submit your proposal.
+:::
 ```
 
 When working on documentation changes in your local machine, you can
