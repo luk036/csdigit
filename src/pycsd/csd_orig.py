@@ -18,7 +18,7 @@ License: GPL2
 from math import ceil, fabs, log, pow
 
 
-def to_csd(number, places=0):
+def to_csd(number: float, places: int = 0) -> str:
     """Convert a decimal number to Canonical Signed Digit (CSD) format.
 
     The CSD representation uses only three symbols: '+' (represents +1),
@@ -87,7 +87,7 @@ def to_csd(number, places=0):
     return csd_str
 
 
-def to_decimal(csd_str):
+def to_decimal(csd_str: str) -> float:
     """Convert a Canonical Signed Digit (CSD) string to a decimal number.
 
     Parses the CSD string and computes its decimal value by evaluating

@@ -16,7 +16,7 @@ indent_ = 2
 csd_dict = {}
 
 
-def is_proper_csd(csd_num):
+def is_proper_csd(csd_num: list[str]) -> bool:
     """Check we've a valid CSD number
     Returns false if the array contains consequitive non-zero terms.
     """
@@ -28,7 +28,7 @@ def is_proper_csd(csd_num):
     return True
 
 
-def cycle_bits(index):
+def cycle_bits(index: int) -> None:
     global indent_
 
     indent_ += 2
@@ -47,7 +47,7 @@ def cycle_bits(index):
     indent_ -= 2
 
 
-def wiki_table():
+def wiki_table() -> str:
     """A table of CSD numbers for the wiki."""
 
     ordered_keys = csd_dict.keys()
@@ -73,7 +73,7 @@ def wiki_table():
     return wiki_str
 
 
-def show_csd():
+def show_csd() -> None:
     """ """
 
     ordered_keys = csd_dict.keys()

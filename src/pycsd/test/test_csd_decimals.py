@@ -18,7 +18,7 @@ good_values_dict = {
 
 
 class tests__decimals(unittest.TestCase):
-    def tmp(self):
+    def tmp(self) -> None:
         pass
 
     def test__01_to_decimal(self) -> None:
@@ -56,7 +56,7 @@ class tests__decimals(unittest.TestCase):
         self.assertEquals(csd.to_csd(-0.25, 4), "0.0-00")
 
 
-def suite():
+def suite() -> unittest.TestSuite:
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(tests__decimals))
     return suite

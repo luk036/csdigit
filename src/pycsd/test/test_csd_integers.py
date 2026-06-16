@@ -28,7 +28,7 @@ class tests__integers(unittest.TestCase):
             self.assertEquals(csd_str, good_values_dict[key])
 
 
-def suite():
+def suite() -> unittest.TestSuite:
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(tests__integers))
     return suite

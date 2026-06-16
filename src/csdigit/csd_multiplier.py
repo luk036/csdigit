@@ -314,7 +314,7 @@ def generate_csd_multipliers(
     best_occurrences: list[tuple[int, int]] = []
     if cross:
 
-        def _scores(item):
+        def _scores(item: tuple[str, list[tuple[int, int]]]) -> int:
             sub, occ = item
             nnz = sub.count("+") + sub.count("-")
             return (nnz - 1) * (len(occ) - 1)

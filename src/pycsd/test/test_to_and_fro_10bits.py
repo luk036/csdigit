@@ -1399,7 +1399,7 @@ class tests__to_and_fro_10bits(unittest.TestCase):
             self.assertEquals(csd_str, good_values_dict[key])
 
 
-def suite():
+def suite() -> unittest.TestSuite:
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(tests__to_and_fro_10bits))
     return suite
