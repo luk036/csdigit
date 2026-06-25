@@ -176,3 +176,7 @@ MANIFEST
 
 # my stuffs
 .hypothesis
+
+# Cache dirs
+.ruff_cache/
+.benchmarks/
