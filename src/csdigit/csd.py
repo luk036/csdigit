@@ -5,6 +5,14 @@ Provides functions to convert between decimal numbers and Canonical Signed Digit
 (CSD) representation — a signed-digit representation using only ``+``, ``-``,
 and ``0`` symbols with no consecutive non-zero digits.
 
+.. svgbob::
+   :align: center
+
+           Decimal ──► Binary ──► CSD
+              │                      │
+              │                      │
+              ◄──────────────────────┘
+
 Functions:
     to_csd: Convert a decimal float to CSD string with specified precision.
     to_csd_i: Convert an integer to CSD string.
