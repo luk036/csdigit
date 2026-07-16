@@ -8,9 +8,9 @@ import sys
 
 sys.path.append("../csd")
 import csd
+import unittest
 
 print(dir(csd))
-import unittest
 
 good_values_dict = {32.5: "+0000.+"}
 
@@ -26,7 +26,7 @@ class test__integer_conversion(unittest.TestCase):
 
 def suite() -> unittest.TestSuite:
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(IntegerConversion))
+    suite.addTest(unittest.makeSuite(test__integer_conversion))
     return suite
 
 

@@ -8,6 +8,6 @@ import sys
 sys.path.append("./csd")
 
 import unittest
-from test import *
+from test import *  # noqa: F403
 
 unittest.main()
