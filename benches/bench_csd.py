@@ -1,5 +1,4 @@
 import timeit
-from csdigit.csd import to_csd, to_csd_i, to_decimal, to_decimal_using_pow, to_csdnnz
 
 def bench(name, stmt, globals_dict=None, number=50000):
     if globals_dict is None:
