@@ -1,11 +1,13 @@
 import timeit
 
+
 def bench(name, stmt, globals_dict=None, number=50000):
     if globals_dict is None:
         globals_dict = globals()
     t = timeit.timeit(stmt, globals=globals_dict, number=number)
     ns_per_op = t * 1e9 / number
     print(f"  {name:<30} {ns_per_op:>8.1f} ns/op  ({number} iters)")
+
 
 print("=== CSD Benchmarks (Python) ===")
 bench("to_csd(28.5, 10)", "to_csd(28.5, 10)")
