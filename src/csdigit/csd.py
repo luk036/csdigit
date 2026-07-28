@@ -54,8 +54,8 @@ def to_csd(decimal_value: float, places: int) -> str:
         >>> to_csd(0.0, 0)
         '0.'
     """
-    if decimal_value == 0.0:
-        return "0." + "0" * places if places > 0 else "0."
+    # if decimal_value == 0.0:
+    #     return "0." + "0" * places if places > 0 else "0."
 
     abs_val = fabs(decimal_value)
     if abs_val < 1.0:
@@ -82,7 +82,6 @@ def to_csd(decimal_value: float, places: int) -> str:
             csd_list.append("0")
 
     csd_list.append(".")
-
     for _ in range(places):
         power_of_two /= 2.0
         determinant = 1.5 * decimal_value
@@ -194,6 +193,19 @@ def to_decimal_using_pow(csd: str) -> float:
     return decimal_value
 
 
+def _csd_str_to_int(csd: str) -> int:
+    result = 0
+    for digit in csd:
+        result *= 2
+        if digit == "+":
+            result += 1
+        elif digit == "-":
+            result -= 1
+        elif digit != "0":
+            logging.info(f"Encounter unknown character {digit}")
+    return result
+
+
 def to_decimal(csd: str) -> float:
     """Convert CSD string to decimal number.
 
@@ -219,29 +231,10 @@ def to_decimal(csd: str) -> float:
         0.5
     """
     if "." not in csd:
-        integral: int = 0
-        for digit in csd:
-            integral *= 2
-            if digit == "+":
-                integral += 1
-            elif digit == "-":
-                integral -= 1
-            elif digit != "0":
-                logging.info(f"Encounter unknown character {digit}")
-                # raise ValueError(ERROR1)
-        return integral
+        return _csd_str_to_int(csd)
 
     integral_part, fractional_part = csd.split(".", 1)
-    integral: int = 0
-    for digit in integral_part:
-        integral *= 2
-        if digit == "+":
-            integral += 1
-        elif digit == "-":
-            integral -= 1
-        elif digit != "0":
-            logging.info(f"Encounter unknown character {digit}")
-            # raise ValueError(ERROR1)
+    integral = _csd_str_to_int(integral_part)
 
     fractional: float = 0.0
     scale = 0.5
@@ -252,7 +245,6 @@ def to_decimal(csd: str) -> float:
             fractional -= scale
         elif digit != "0":
             logging.info(f"Encounter unknown character {digit}")
-            # raise ValueError(ERROR1)
         scale /= 2.0
 
     return float(integral) + fractional
@@ -287,8 +279,8 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
         >>> to_csdnnz(0.5, 4)
         '0.+'
     """
-    if decimal_value == 0.0:
-        return "0"
+    # if decimal_value == 0.0:
+    #     return "0"
 
     abs_val = fabs(decimal_value)
     if abs_val < 1.0:
@@ -320,17 +312,6 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
                 csd_list.append("0")
         else:
             csd_list.append("0")
-
-        # if nnz > 0 and determinant > power_of_two:
-        #     csd_list.append("+")
-        #     decimal_value -= power_of_two
-        #     nnz -= 1
-        # elif nnz > 0 and determinant < -power_of_two:
-        #     csd_list.append("-")
-        #     decimal_value += power_of_two
-        #     nnz -= 1
-        # else:
-        #     csd_list.append("0")
 
     return "".join(csd_list)
 
