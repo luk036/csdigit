@@ -63,12 +63,7 @@ def longest_repeated_substring(csd_string: str) -> str:
             else:
                 LCSRe[cur_row + col_index] = 0
 
-    # If we have non-empty result, then insert
-    # all characters from first character to
-    # last character of string
     if result_length > 0:
-        # for row_index in range(index - result_length + 1, index + 1):
-        #     result = result + csd_string[row_index - 1]
         result = csd_string[index - result_length : index]
 
     return result

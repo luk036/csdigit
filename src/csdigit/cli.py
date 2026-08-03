@@ -32,12 +32,6 @@ __license__ = "MIT"
 _logger = logging.getLogger(__name__)
 
 
-# ---- CLI ----
-# The functions defined in this section are wrappers around the main Python
-# API allowing them to be called directly from the terminal as a CLI
-# executable/script.
-
-
 def parse_args(args: List[str]) -> argparse.Namespace:
     """Parse command line parameters
 

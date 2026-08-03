@@ -74,8 +74,6 @@ def wiki_table() -> str:
 
 
 def show_csd() -> None:
-    """ """
-
     ordered_keys = csd_dict.keys()
     ordered_keys.sort()
 

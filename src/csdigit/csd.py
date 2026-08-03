@@ -54,9 +54,6 @@ def to_csd(decimal_value: float, places: int) -> str:
         >>> to_csd(0.0, 0)
         '0.'
     """
-    # if decimal_value == 0.0:
-    #     return "0." + "0" * places if places > 0 else "0."
-
     abs_val = fabs(decimal_value)
     if abs_val < 1.0:
         remainder = 0
@@ -166,12 +163,6 @@ def to_decimal_using_pow(csd: str) -> float:
         >>> to_decimal_using_pow("0.+")
         0.5
     """
-    # import warnings
-    # warnings.warn(
-    #     "`to_decimal_using_pow` is deprecated, use `to_decimal` instead.",
-    #     DeprecationWarning,
-    #     stacklevel=2,
-    # )
     decimal_value: float = 0.0
     location: int = 0  # Tracks position of decimal point
     for pos, digit in enumerate(csd):
@@ -185,7 +176,6 @@ def to_decimal_using_pow(csd: str) -> float:
             location = pos + 1  # Mark decimal point position
         else:
             logging.info(f"Encounter unknown character {digit}")
-            # raise ValueError(ERROR1)
     if location != 0:
         # Adjust for fractional part by dividing by appropriate power of 2
         decimal_value /= pow(2.0, len(csd) - location)
@@ -279,9 +269,6 @@ def to_csdnnz(decimal_value: float, nnz: int) -> str:
         >>> to_csdnnz(0.5, 4)
         '0.+'
     """
-    # if decimal_value == 0.0:
-    #     return "0"
-
     abs_val = fabs(decimal_value)
     if abs_val < 1.0:
         remainder = 0

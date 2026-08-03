@@ -128,7 +128,6 @@ module csd_multiplier (
         verilog += f'\n\n    // LCSRe: repeated pattern "{repeated}"'
         verilog += f"\n    wire signed [{output_width - 1}:0] _pat = {pat_expr};"
 
-        # Build full expression from segments
         expr_parts: list[str] = []
         cur = 0
         for pos in pat_positions:
