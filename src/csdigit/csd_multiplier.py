@@ -8,9 +8,73 @@ Common Substring with Repeated Elements) is used to share hardware via a
 sub-expression wire.
 """
 
-from typing import Optional
+from dataclasses import dataclass
+from typing import Iterable, Optional, Union
 
 from csdigit.lcsre import longest_repeated_substring
+
+
+@dataclass(frozen=True)
+class MultiplierSpec:
+    """Specification for one CSD constant-multiplier output.
+
+    Groups the four values that describe a single multiplied output of
+    :func:`generate_csd_multipliers`: the output port name, the CSD
+    coefficient string, the input bit width, and the highest power of two.
+
+    :param name: Output port name in the generated Verilog module
+    :param csd: CSD coefficient string (only '+', '-', '0')
+    :param input_width: Bit width of the input signal ``x``
+    :param max_power: Highest power of two (must equal ``len(csd) - 1``)
+
+    Examples:
+        >>> spec = MultiplierSpec("h0", "+0-", 8, 2)
+        >>> spec.name
+        'h0'
+        >>> spec.csd
+        '+0-'
+    """
+
+    name: str
+    csd: str
+    input_width: int
+    max_power: int
+
+
+def validate_csd(csd: str, max_power: int, *, context: str = "") -> None:
+    """Validate a CSD string against ``max_power``.
+
+    :param csd: CSD string to validate
+    :param max_power: Highest power of two; ``len(csd)`` must equal ``max_power + 1``
+    :param context: Optional suffix appended to error messages (e.g. which
+        coefficient failed) to make multi-coefficient errors actionable
+    :raises ValueError: If the length doesn't match or the string contains
+        characters other than '+', '-', or '0'
+
+    Examples:
+        >>> validate_csd("+0-", 2)
+        >>> validate_csd("+0-", 3)
+        Traceback (most recent call last):
+            ...
+        ValueError: CSD length 3 doesn't match max_power=3 (should be max_power+1)
+    """
+    suffix = f" {context}" if context else ""
+    if len(csd) != max_power + 1:
+        raise ValueError(
+            f"CSD length {len(csd)} doesn't match max_power={max_power} "
+            f"(should be max_power+1){suffix}"
+        )
+    if not all(ch in "+-0" for ch in csd):
+        raise ValueError(f"CSD string can only contain '+', '-', or '0'{suffix}")
+
+
+def _normalize_specs(
+    coeffs: Iterable[Union[MultiplierSpec, tuple[str, str, int, int]]],
+) -> list[MultiplierSpec]:
+    return [
+        spec if isinstance(spec, MultiplierSpec) else MultiplierSpec(*spec)
+        for spec in coeffs
+    ]
 
 
 def _build_range_expr(csd: str, start: int, length: int, max_power: int) -> str:
@@ -72,14 +136,7 @@ def generate_csd_multiplier(csd: str, input_width: int, max_power: int) -> str:
         ValueError: If csd length doesn't match max_power+1 or the string
                     contains characters other than '+', '-', '0'
     """
-    # --- validation ---
-    if len(csd) != max_power + 1:
-        raise ValueError(
-            f"CSD length {len(csd)} doesn't match max_power={max_power} "
-            f"(should be max_power+1)"
-        )
-    if not all(ch in "+-0" for ch in csd):
-        raise ValueError("CSD string can only contain '+', '-', or '0'")
+    validate_csd(csd, max_power)
 
     # Parse CSD and collect non-zero terms
     terms: list[tuple[int, str]] = []
@@ -248,7 +305,7 @@ def _build_coeff_expr(
 
 
 def generate_csd_multipliers(
-    coeffs: list[tuple[str, str, int, int]],
+    coeffs: Iterable[Union[MultiplierSpec, tuple[str, str, int, int]]],
     module_name: str = "csd_filter",
 ) -> str:
     """Generate a Verilog module with multiple CSD multipliers and cross-CSE.
@@ -263,50 +320,45 @@ def generate_csd_multipliers(
     ``'0'`` characters.
 
     Args:
-        coeffs: List of (output_name, csd_str, input_width, max_power) tuples.
+        coeffs: Coefficients to realise. Each entry is either a
+                :class:`MultiplierSpec` or a legacy
+                ``(output_name, csd_str, input_width, max_power)`` tuple.
                 All entries **must** share the same input_width and max_power.
         module_name: Name for the generated Verilog module.
 
     Returns:
         Verilog module code as a string
     """
-    if not coeffs:
+    specs = _normalize_specs(coeffs)
+    if not specs:
         raise ValueError("At least one coefficient is required")
 
     # --- validation & uniform width enforcement ---
-    input_width = coeffs[0][2]
-    max_power = coeffs[0][3]
+    input_width = specs[0].input_width
+    max_power = specs[0].max_power
 
-    for name, csd, iw, mp in coeffs:
-        if iw != input_width or mp != max_power:
+    for spec in specs:
+        if spec.input_width != input_width or spec.max_power != max_power:
             raise ValueError(
                 "All coefficients must share the same input_width and max_power "
-                f"for cross-CSE.  Got ({iw},{mp}) for '{name}', "
-                f"expected ({input_width},{max_power}). "
+                f"for cross-CSE.  Got ({spec.input_width},{spec.max_power}) for "
+                f"'{spec.name}', expected ({input_width},{max_power}). "
                 "Pad narrower CSDs with leading '0' characters."
             )
-        if len(csd) != max_power + 1:
-            raise ValueError(
-                f"CSD '{csd}' length {len(csd)} doesn't match "
-                f"max_power={max_power} for coefficient '{name}'"
-            )
-        if not all(ch in "+-0" for ch in csd):
-            raise ValueError(
-                f"CSD string '{csd}' for '{name}' can only contain '+', '-', or '0'"
-            )
+        validate_csd(spec.csd, max_power, context=f"for coefficient '{spec.name}'")
 
     output_width = input_width + max_power
 
     # --- collect all x_shift powers needed ---
     all_powers: set[int] = set()
-    for _, csd, _, _ in coeffs:
-        for idx, ch in enumerate(csd):
+    for spec in specs:
+        for idx, ch in enumerate(spec.csd):
             if ch != "0":
                 all_powers.add(max_power - idx)
     all_powers_sorted = sorted(all_powers, reverse=True)
 
     # --- find best cross-CSD pattern ---
-    csd_strings = [csd for _, csd, _, _ in coeffs]
+    csd_strings = [spec.csd for spec in specs]
     cross = _find_cross_patterns(csd_strings)
 
     best_pattern: Optional[str] = None
@@ -329,9 +381,9 @@ def generate_csd_multipliers(
     verilog = f"\nmodule {module_name} ("
     verilog += f"\n    input signed [{input_width - 1}:0] x,      // Input value"
 
-    for name, _csd, _iw, _mp in coeffs:
-        ow = _iw + _mp
-        verilog += f"\n    output signed [{ow - 1}:0] {name}"
+    for spec in specs:
+        ow = spec.input_width + spec.max_power
+        verilog += f"\n    output signed [{ow - 1}:0] {spec.name}"
 
     verilog += "\n);"
 
@@ -352,21 +404,21 @@ def generate_csd_multipliers(
         verilog += f"\n    wire signed [{output_width - 1}:0] {cse_name} = {cse_expr};"
 
     # Per-coefficient assignments
-    for idx, (name, csd_str, _iw, _mp) in enumerate(coeffs):
-        verilog += f"\n\n    // {name}: {csd_str}"
-        ow = _iw + _mp
+    for idx, spec in enumerate(specs):
+        verilog += f"\n\n    // {spec.name}: {spec.csd}"
+        ow = spec.input_width + spec.max_power
 
         if best_pattern and any(ci == idx for ci, _ in best_occurrences):
             expr = _build_coeff_expr(
-                csd_str, max_power, best_pattern, cse_base_pos, cse_name
+                spec.csd, max_power, best_pattern, cse_base_pos, cse_name
             )
         else:
-            expr = _build_coeff_expr(csd_str, max_power, None, 0, "")
+            expr = _build_coeff_expr(spec.csd, max_power, None, 0, "")
 
         if not expr:
-            verilog += f"\n    wire signed [{ow - 1}:0] {name} = 0;"
+            verilog += f"\n    wire signed [{ow - 1}:0] {spec.name} = 0;"
         else:
-            verilog += f"\n    wire signed [{ow - 1}:0] {name} = {expr};"
+            verilog += f"\n    wire signed [{ow - 1}:0] {spec.name} = {expr};"
 
     verilog += "\nendmodule\n"
     return verilog

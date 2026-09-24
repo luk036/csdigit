@@ -1,12 +1,16 @@
+from dataclasses import FrozenInstanceError
+
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
 from csdigit.csd_multiplier import (
+    MultiplierSpec,
     _build_coeff_expr,
     _find_cross_patterns,
     generate_csd_multiplier,
     generate_csd_multipliers,
+    validate_csd,
 )
 
 
@@ -694,3 +698,77 @@ def test_generate_csd_multipliers_with_csd_leading_minus() -> None:
     )
     assert "module leading_minus" in verilog
     assert "-x_shift2 + x_shift0" in verilog
+
+
+# =====================================================================
+# MultiplierSpec / validate_csd
+# =====================================================================
+
+
+def test_multiplier_spec_is_frozen_value_object() -> None:
+    """MultiplierSpec is an immutable value object with named fields."""
+    spec = MultiplierSpec("h0", "+0-", 8, 2)
+    assert (spec.name, spec.csd, spec.input_width, spec.max_power) == (
+        "h0",
+        "+0-",
+        8,
+        2,
+    )
+    assert spec == MultiplierSpec("h0", "+0-", 8, 2)
+    assert spec != MultiplierSpec("h1", "+0-", 8, 2)
+    with pytest.raises(FrozenInstanceError):
+        spec.csd = "000"  # type: ignore[misc]
+
+
+def test_validate_csd_accepts_valid_string() -> None:
+    """A well-formed CSD string matching max_power validates without error."""
+    validate_csd("+0-", 2)
+    validate_csd("0", 0)
+
+
+def test_validate_csd_rejects_length_mismatch() -> None:
+    with pytest.raises(ValueError, match="doesn't match max_power"):
+        validate_csd("+0-", 3)
+
+
+def test_validate_csd_rejects_invalid_chars() -> None:
+    with pytest.raises(ValueError, match="can only contain"):
+        validate_csd("1+0", 2)
+
+
+def test_validate_csd_appends_context() -> None:
+    """The optional context suffix identifies which coefficient failed."""
+    with pytest.raises(ValueError, match="for coefficient 'h0'"):
+        validate_csd("1+0", 2, context="for coefficient 'h0'")
+
+
+def test_generate_csd_multipliers_specs_match_tuples() -> None:
+    """MultiplierSpec input produces byte-identical output to legacy tuples."""
+    tuples = [
+        ("h0", "+0-0+0-0", 8, 7),
+        ("h1", "0000+0-0", 8, 7),
+    ]
+    specs = [MultiplierSpec(*t) for t in tuples]
+    assert generate_csd_multipliers(specs, module_name="fir") == (
+        generate_csd_multipliers(tuples, module_name="fir")
+    )
+
+
+def test_generate_csd_multipliers_mixed_specs_and_tuples() -> None:
+    """Specs and legacy tuples can be mixed in one call."""
+    coeffs = [
+        MultiplierSpec("h0", "+0-0+0-0", 8, 7),
+        ("h1", "0000+0-0", 8, 7),
+    ]
+    verilog = generate_csd_multipliers(coeffs, module_name="mixed_types")
+    assert "module mixed_types" in verilog
+    assert "_cse_0" in verilog
+
+
+def test_generate_csd_multipliers_spec_error_names_coefficient() -> None:
+    """Validation errors from a spec identify the offending coefficient."""
+    with pytest.raises(ValueError, match="for coefficient 'bad'"):
+        generate_csd_multipliers(
+            [MultiplierSpec("bad", "xyz", 8, 2)],
+            module_name="bad_coeff",
+        )
