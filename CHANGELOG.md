@@ -1,5 +1,28 @@
 # Changelog
 
+## Version 0.5 (2026-10-09)
+
+### Bug Fixes
+- **Package metadata**: Replaced the PyScaffold placeholder description and URLs in `setup.cfg` with the real csdigit project info. (#78f1f81)
+- **Ruff warnings**: Resolved F403/E402/F821 warnings in the test files. (#9444e6f)
+- **mypy config**: Removed the duplicate `ignore_missing_imports` entry from `mypy.ini`. (#ec86626)
+
+### Testing & Code Quality
+- **Multiplier tests**: Added `tests/test_csd_multiplier.py` (+78 lines) covering the CSD multiplier generators. (#64e3603)
+
+### Code Cleanup
+- **`MultiplierSpec` + shared `validate_csd`**: Introduced a `MultiplierSpec` parameter object and a single `validate_csd` helper so `generate_csd_multipliers` no longer takes bare positional tuples and both generators share one CSD format rule (legacy tuples still accepted). (#64e3603)
+- **Simplified `to_decimal()`**: Extracted the duplicated parsing logic into a `_csd_str_to_int` helper. (#1f6e397)
+- **Removed AI slop**: Stripped boilerplate from docstrings and comments and removed unused imports from the benchmark files. (#70b8612, #17d9897)
+- **Formatting**: Formatted the benchmark files with black. (#e5f5873)
+
+### Documentation
+- **AGENTS.md**: Added agent guidelines for the repository. (#f6d7977)
+- **Python/C++/Rust comparison**: Added `compare-py-cpp-rs.md`. (#ec86626)
+
+### Build & CI
+- **Updated GitHub Actions**: `checkout`→v4, `setup-python`→v5, `codecov-action`→v4. (#e7bd7f3)
+
 ## Version 0.4 (2026-07-16)
 
 ### Documentation
