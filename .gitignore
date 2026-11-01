@@ -180,3 +180,14 @@ MANIFEST
 # Cache dirs
 .ruff_cache/
 .benchmarks/
+
+# Paper build artifacts
+paper/*.aux
+paper/*.log
+paper/*.nav
+paper/*.out
+paper/*.snm
+paper/*.toc
+paper/*.vrb
+paper/csd-tutorial-talk.tex
+paper/*.txt
