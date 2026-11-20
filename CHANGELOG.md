@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.6 (2026-11-20)
+
+### Documentation
+- **CSD tutorial paper, talk and demos**: Added the canonical-signed-digit tutorial paper, its accompanying presentation, and the demonstration scripts. (#2562cd1)
+
 ## Version 0.5 (2026-10-09)
 
 ### Bug Fixes
